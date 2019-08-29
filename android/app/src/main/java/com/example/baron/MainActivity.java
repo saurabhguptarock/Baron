@@ -1,4 +1,4 @@
-package com.example.baron;
+package com.saverl.baron;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
