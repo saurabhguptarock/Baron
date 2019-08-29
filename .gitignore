@@ -11,6 +11,7 @@
 
 android/key.properties
 android/app/keys/
+android/app/google-services.json
 
 # IntelliJ related
 *.iml
