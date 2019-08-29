@@ -1,4 +1,4 @@
-# baron
+# Baron
 
 A new Flutter project.
 
