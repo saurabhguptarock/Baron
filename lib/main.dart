@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,9 +35,15 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.all(80.0),
         child: InkWell(
           onTap: () => _scaffoldKey.currentState.openDrawer(),
-          child: Text(
-            'Padding',
-            style: TextStyle(fontFamily: 'OpenSans', fontSize: 20),
+          child: SizedBox(
+            height: 20,
+            width: 20,
+            child: SpinKitRing(
+              color: Colors.red,
+              duration: Duration(milliseconds: 800),
+              size: 30,
+              lineWidth: 3,
+            ),
           ),
         ),
       ),
