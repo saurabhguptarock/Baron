@@ -21,8 +21,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.green,
+      drawer: Drawer(
+        child: Text('data'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(80.0),
+        child: InkWell(
+          onTap: () => _scaffoldKey.currentState.openDrawer(),
+          child: Text(
+            'Padding',
+            style: TextStyle(fontFamily: 'OpenSans', fontSize: 20),
+          ),
+        ),
+      ),
+    );
   }
 }
