@@ -13,6 +13,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Baron"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3723052345438421~2320468479"/>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
