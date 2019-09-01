@@ -160,13 +160,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.4+1"
-  flutter_spinkit:
-    dependency: "direct main"
-    description:
-      name: flutter_spinkit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -221,13 +214,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.2"
-  path_provider:
-    dependency: "direct main"
-    description:
-      name: path_provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0"
   pedantic:
     dependency: transitive
     description:
@@ -256,6 +242,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  quick_actions:
+    dependency: "direct main"
+    description:
+      name: quick_actions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2+2"
   quiver:
     dependency: transitive
     description:

@@ -1,7 +1,7 @@
 name: Baron
 description: A new Flutter project.
 
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -18,7 +18,6 @@ dependencies:
   audioplayer: ^0.5.2
   flutter_offline: ^0.2.4+1
   flutter_local_notifications: ^0.8.2
-  flutter_spinkit: ^4.0.0
   cloud_firestore: ^0.12.9+2
   firebase_dynamic_links: ^0.5.0+1
   firebase_auth: ^0.14.0+5
@@ -26,8 +25,8 @@ dependencies:
   in_app_purchase: ^0.2.1
   firebase_admob: ^0.9.0
   share: ^0.6.2+1
-  path_provider: ^1.2.0
   shared_preferences: ^0.5.3+4
+  quick_actions: ^0.3.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +53,8 @@ flutter:
    - assets/logos/Roar.png
    - assets/logos/Royal.png
    - assets/logos/Silver.png
+   - assets/audio/level_up.mp3
+   - assets/audio/coin_purchase.wav
 
   fonts:
     - family: OpenSans
