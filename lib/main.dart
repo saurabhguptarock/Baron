@@ -57,7 +57,7 @@ class QuickActionsManager extends StatefulWidget {
 class _QuickActionsManagerState extends State<QuickActionsManager> {
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of(context);
+    var user = Provider.of<FirebaseUser>(context);
     return checkIfLoggedIn(user);
   }
 
