@@ -43,18 +43,9 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/logos/Bronze_1.png
-   - assets/logos/Bronze_2.png
-   - assets/logos/Crown.png
-   - assets/logos/Diamond.png
-   - assets/logos/Elite.png
-   - assets/logos/Gold.png
-   - assets/logos/Platinum.png
-   - assets/logos/Roar.png
-   - assets/logos/Royal.png
-   - assets/logos/Silver.png
-   - assets/audio/level_up.mp3
-   - assets/audio/coin_purchase.wav
+   - assets/logos/
+   - assets/audio/
+   - assets/images/
 
   fonts:
     - family: OpenSans

@@ -1,15 +1,18 @@
+import 'package:Baron/pages/home_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/upgrade_page.dart';
-import 'package:Baron/splash_screen.dart';
 import 'package:Baron/users/login.dart';
 import 'package:Baron/users/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
-bool isLoggedIn;
+bool isLoggedIn = false;
 bool isDark = false;
 
 checkLogin() async {
@@ -25,16 +28,23 @@ checkTheme() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'QuickActions Demo',
-      theme: isDark == true ? ThemeData.dark() : ThemeData.light(),
-      home: QuickActionsManager(),
-      routes: <String, WidgetBuilder>{
-        "/profile": (BuildContext context) => ProfilePage(),
-        "/login": (BuildContext context) => LoginPage(),
-        "/upgrade": (BuildContext context) => UpgradePage(),
-        "/settings": (BuildContext context) => SettingsPage(),
-      },
+    return MultiProvider(
+      providers: [
+        StreamProvider<FirebaseUser>.value(
+          value: FirebaseAuth.instance.onAuthStateChanged,
+        )
+      ],
+      child: MaterialApp(
+        title: 'QuickActions Demo',
+        theme: isDark == true ? ThemeData.dark() : ThemeData.light(),
+        home: QuickActionsManager(),
+        routes: <String, WidgetBuilder>{
+          "/profile": (BuildContext context) => ProfilePage(),
+          "/login": (BuildContext context) => LoginPage(),
+          "/upgrade": (BuildContext context) => UpgradePage(),
+          "/settings": (BuildContext context) => SettingsPage(),
+        },
+      ),
     );
   }
 }
@@ -45,43 +55,16 @@ class QuickActionsManager extends StatefulWidget {
 }
 
 class _QuickActionsManagerState extends State<QuickActionsManager> {
-  final QuickActions quickActions = QuickActions();
-  void _setupQuickActions() {
-    quickActions.setShortcutItems(<ShortcutItem>[
-      ShortcutItem(
-          type: 'action_profile', localizedTitle: 'Profile', icon: 'user'),
-      ShortcutItem(
-          type: 'action_upgrade', localizedTitle: 'Upgrade', icon: 'upgrade'),
-      ShortcutItem(
-          type: 'action_settings',
-          localizedTitle: 'Settings',
-          icon: 'settings'),
-    ]);
-  }
-
-  void _handleQuickActions() {
-    quickActions.initialize((shortcutType) {
-      if (shortcutType == 'action_profile') {
-        Navigator.pushNamed(context, '/profile');
-      } else if (shortcutType == 'action_upgrade') {
-        Navigator.pushNamed(context, '/upgrade');
-      } else if (shortcutType == 'action_settings') {
-        Navigator.pushNamed(context, '/settings');
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SplashScreen();
+    var user = Provider.of(context);
+    return checkIfLoggedIn(user);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    checkTheme();
-    checkLogin();
-    _setupQuickActions();
-    _handleQuickActions();
+  Widget checkIfLoggedIn(FirebaseUser user) {
+    if (user != null)
+      return HomePage();
+    else
+      return LoginPage();
   }
 }
