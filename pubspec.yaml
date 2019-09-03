@@ -27,6 +27,7 @@ dependencies:
   share: ^0.6.2+1
   shared_preferences: ^0.5.3+4
   quick_actions: ^0.3.0
+  google_sign_in: ^4.0.7
 
 dev_dependencies:
   flutter_test:

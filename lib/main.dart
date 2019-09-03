@@ -12,13 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
-bool isLoggedIn = false;
 bool isDark = false;
-
-checkLogin() async {
-  final prefs = await SharedPreferences.getInstance();
-  isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
-}
 
 checkTheme() async {
   final prefs = await SharedPreferences.getInstance();
@@ -43,6 +37,7 @@ class MyApp extends StatelessWidget {
           "/login": (BuildContext context) => LoginPage(),
           "/upgrade": (BuildContext context) => UpgradePage(),
           "/settings": (BuildContext context) => SettingsPage(),
+          "/home": (BuildContext context) => HomePage(),
         },
       ),
     );
