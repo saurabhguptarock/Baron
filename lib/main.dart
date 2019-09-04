@@ -12,13 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
-bool isDark = false;
-
-checkTheme() async {
-  final prefs = await SharedPreferences.getInstance();
-  isDark = prefs.getBool("theme") ?? false;
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -30,7 +23,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'QuickActions Demo',
-        theme: isDark == true ? ThemeData.dark() : ThemeData.light(),
+        theme: ThemeData(primaryColor: Color.fromRGBO(231, 38, 61, 1)),
         home: QuickActionsManager(),
         routes: <String, WidgetBuilder>{
           "/profile": (BuildContext context) => ProfilePage(),

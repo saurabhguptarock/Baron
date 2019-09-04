@@ -37,14 +37,14 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: assets/logos/icon.png
+  image_path: assets/images/icon.png
 
 
 flutter:
   uses-material-design: true
 
   assets:
-   - assets/logos/
+   - assets/collectibles/
    - assets/audio/
    - assets/images/
 

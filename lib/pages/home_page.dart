@@ -138,109 +138,103 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.4,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/background.png'),
-                      fit: BoxFit.fill),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 43),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () => _scaffoldKey.currentState.openDrawer(),
-                        icon: Icon(
-                          Icons.menu,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          FontAwesomeIcons.search,
-                          color: Colors.white,
-                          size: 23,
-                        ),
-                      ),
-                    ],
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 85,
+            color: Color.fromRGBO(23, 31, 42, 1),
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: 20, right: 20, top: MediaQuery.of(context).padding.top),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.6,
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(27, 35, 47, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Text(
+                            'Search for user or team...',
+                            style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontSize: 12,
+                                color: Colors.white30),
+                          ),
+                          Icon(
+                            FontAwesomeIcons.search,
+                            color: Color.fromRGBO(253, 125, 73, 1),
+                            size: 13,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.4 - 63,
-            left: 20,
-            right: 20,
-            child: Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Container(
-                height: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ScrollConfiguration(
-                  behavior: MyBehavior(),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Stack(
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 20),
+                        Positioned(
+                          top: 10,
+                          right: 3,
+                          child: Icon(
+                            FontAwesomeIcons.bell,
+                            color: Colors.white,
+                            size: 23,
+                          ),
                         ),
-                        premiumAvatarCard('PremiumJake'),
-                        Padding(
-                          padding: EdgeInsets.only(right: 15),
-                        ),
-                        premiumAvatarCard('DarthVader'),
-                        Padding(
-                          padding: EdgeInsets.only(right: 15),
-                        ),
-                        premiumAvatarCard('Red1'),
-                        Padding(
-                          padding: EdgeInsets.only(right: 15),
-                        ),
-                        premiumAvatarCard('PremiumChuck'),
-                        Padding(
-                          padding: EdgeInsets.only(right: 15),
-                        ),
-                        premiumAvatarCard('PremiumBomb'),
-                        Padding(
-                          padding: EdgeInsets.only(right: 15),
-                        ),
-                        premiumAvatarCard('PremiumRed'),
-                        Padding(
-                          padding: EdgeInsets.only(right: 15),
+                        Positioned(
+                          right: 0,
+                          top: 3,
+                          child: Container(
+                            width: 17,
+                            height: 17,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Color.fromRGBO(222, 97, 59, 1),
+                                  Color.fromRGBO(231, 39, 61, 1)
+                                ],
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '2',
+                                style: TextStyle(
+                                    fontFamily: 'OpenSans',
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
                         )
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-          )
+          ),
+          Text('')
         ],
       ),
     );
