@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:Baron/services/firebase_service.dart';
+import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,8 +9,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   double opacity = 0.0;
-  FirebaseService _firebaseService = FirebaseService();
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                       opacity: opacity,
                       duration: Duration(milliseconds: 2000),
                       child: InkWell(
-                        onTap: () => _firebaseService.login(),
+                        onTap: () => firebaseService.login(),
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           width: MediaQuery.of(context).size.width,

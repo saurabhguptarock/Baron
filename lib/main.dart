@@ -1,8 +1,12 @@
+import 'package:Baron/model/user_model.dart';
 import 'package:Baron/pages/home_page.dart';
+import 'package:Baron/pages/notification_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/upgrade_page.dart';
+import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/users/login.dart';
 import 'package:Baron/users/profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +34,7 @@ class MyApp extends StatelessWidget {
           "/login": (BuildContext context) => LoginPage(),
           "/upgrade": (BuildContext context) => UpgradePage(),
           "/settings": (BuildContext context) => SettingsPage(),
+          "/notifications": (BuildContext context) => NotificationsPage(),
           "/home": (BuildContext context) => HomePage(),
         },
       ),
@@ -51,7 +56,11 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
 
   Widget checkIfLoggedIn(FirebaseUser user) {
     if (user != null)
-      return HomePage();
+      return StreamProvider<User>.value(
+        initialData: User.fromMap({}),
+        value: firebaseService.streamUser(user.uid),
+        child: HomePage(),
+      );
     else
       return LoginPage();
   }

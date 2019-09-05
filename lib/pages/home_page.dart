@@ -1,4 +1,5 @@
-import 'package:Baron/services/firebase_service.dart';
+import 'package:Baron/model/user_model.dart';
+import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  FirebaseService _firebaseService = FirebaseService();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
+    final userDetails = Provider.of<User>(context);
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
@@ -112,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                 left: 10,
                 right: 10,
                 child: InkWell(
-                  onTap: () => _firebaseService.signOut(),
+                  onTap: () => firebaseService.signOut(),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(143, 144, 155, 1),
@@ -138,6 +139,34 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: <Widget>[
+          ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 85),
+                    child: Container(
+                      color: Colors.yellow,
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Text('asdasd'),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.red,
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
+                      child: Text('asdasd'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Container(
             width: MediaQuery.of(context).size.width,
             height: 85,
@@ -186,7 +215,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed('/notifications'),
                     icon: Stack(
                       children: <Widget>[
                         Positioned(
@@ -217,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Center(
                               child: Text(
-                                '2',
+                                '${userDetails.noOfNotification}',
                                 style: TextStyle(
                                     fontFamily: 'OpenSans',
                                     fontSize: 10,
@@ -234,7 +264,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Text('')
         ],
       ),
     );
