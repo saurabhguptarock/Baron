@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,120 +21,443 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
-        child: Container(
-          color: Color.fromRGBO(52, 61, 88, 1),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                top: 100,
-                left: 10,
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'OpenSans',
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold),
+        child: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+                  color: Color.fromRGBO(52, 61, 88, 1),
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(user.photoUrl),
+                            radius: 35,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: AssetImage(
+                                    'assets/images/${userDetails.badge}.png'),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 7),
+                              ),
+                              Text(
+                                userDetails.badge,
+                                style: TextStyle(
+                                    fontFamily: 'OpenSans',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 15),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            user.displayName,
+                            style: TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 8),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '${userDetails.followers} Followers',
+                                style: TextStyle(
+                                    fontFamily: 'OpenSans',
+                                    fontSize: 12,
+                                    color: Colors.white),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    radius: 10,
+                                    backgroundImage: AssetImage(
+                                        'assets/images/${userDetails.tyre}.png'),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 7),
+                                  ),
+                                  Text(
+                                    userDetails.tyre,
+                                    style: TextStyle(
+                                        fontFamily: 'OpenSans',
+                                        fontSize: 12,
+                                        color: Colors.white),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 15),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 170,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/profile');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 20),
-                        ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage: NetworkImage(user.photoUrl),
+                        Icon(
+                          FontAwesomeIcons.user,
+                          color: Colors.grey,
+                          size: 23,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.only(right: 20),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              user.displayName,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 5),
-                            ),
-                            Text(
-                              user.email,
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        Text(
+                          'Profile',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         )
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 30),
-                    ),
-                    Row(
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/leaderboard');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          width: 20,
-                        ),
                         Icon(
-                          FontAwesomeIcons.folder,
-                          color: Colors.white,
-                          size: 30,
+                          FontAwesomeIcons.chartBar,
+                          color: Colors.grey,
+                          size: 23,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Leaderboard',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/inventory');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.box,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Inventory',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/upgrade');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.angleDoubleUp,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
                         ),
                         Text(
                           'Upgrade',
                           style: TextStyle(
-                              color: Colors.white,
                               fontFamily: 'OpenSans',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
                       ],
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 20,
-                left: 10,
-                right: 10,
-                child: InkWell(
-                  onTap: () => firebaseService.signOut(),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(143, 144, 155, 1),
-                      borderRadius: BorderRadius.circular(13),
-                    ),
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        'Log Out',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'OpenSans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
-                      ),
                     ),
                   ),
                 ),
-              )
-            ],
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/collectibles');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.archive,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Collectibles',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/notifications');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        userDetails.noOfNotification > 0
+                            ? Stack(
+                                children: <Widget>[
+                                  Icon(
+                                    FontAwesomeIcons.bell,
+                                    color: Colors.grey,
+                                    size: 23,
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    child: CircleAvatar(
+                                      radius: 3,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Icon(
+                                FontAwesomeIcons.bell,
+                                color: Colors.grey,
+                                size: 23,
+                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Notifications',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/settings');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.userCog,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Settings',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () => firebaseService.signOut(),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.signOutAlt,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Sign Out',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 80),
+                ),
+                Divider(
+                  height: 0,
+                  color: Colors.grey,
+                  indent: 15,
+                  endIndent: 15,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 15),
+                ),
+                InkWell(
+                  onTap: () {
+                    Share.share(
+                        'Download Baron a competitive game app. https://bit.ly/2lBMjfk');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.shareAlt,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Tell a Friend',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.questionCircle,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Help and Feedback',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -7,8 +7,12 @@ class User {
   final String email;
   final String photoUrl;
   final String name;
+  final String tyre;
+  final String badge;
 
   User({
+    this.tyre,
+    this.badge,
     this.noOfNotification,
     this.followers,
     this.following,
@@ -20,6 +24,8 @@ class User {
   factory User.fromMap(Map data) {
     return User(
       noOfNotification: data['noOfNotification'] ?? 0,
+      tyre: data['tyre'] ?? 'Bronze',
+      badge: data['badge'] ?? 'Elite',
       name: data['name'] ?? '',
       uid: data['uid'] ?? '',
       email: data['email'] ?? '',

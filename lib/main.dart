@@ -1,5 +1,8 @@
 import 'package:Baron/model/user_model.dart';
+import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/home_page.dart';
+import 'package:Baron/pages/inventory_page.dart';
+import 'package:Baron/pages/leaderboard_page.dart';
 import 'package:Baron/pages/notification_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/upgrade_page.dart';
@@ -33,6 +36,9 @@ class MyApp extends StatelessWidget {
           "/profile": (BuildContext context) => ProfilePage(),
           "/login": (BuildContext context) => LoginPage(),
           "/upgrade": (BuildContext context) => UpgradePage(),
+          "/leaderboard": (BuildContext context) => LeaderBoard(),
+          "/collectibles": (BuildContext context) => CollectiblesPage(),
+          "/inventory": (BuildContext context) => InventoryPage(),
           "/settings": (BuildContext context) => SettingsPage(),
           "/notifications": (BuildContext context) => NotificationsPage(),
           "/home": (BuildContext context) => HomePage(),
