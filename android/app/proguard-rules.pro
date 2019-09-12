@@ -10,3 +10,4 @@
 -dontwarn com.google.android.gms.**
 -keep class com.google.common.** { *; }
 -dontwarn com.google.common.**
+-dontwarn android.**

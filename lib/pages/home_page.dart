@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +17,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final FirebaseMessaging _messaging = FirebaseMessaging();
+  final Firestore _firestore = Firestore.instance;
+
+  void saveDeviceToken(String uid) async {
+    String token = await _messaging.getToken();
+    if (token != null) {
+      var tokenRef = _firestore
+          .collection('users')
+          .document(uid)
+          .collection('tokens')
+          .document(token);
+      await tokenRef.setData({
+        'token': token,
+        'createdAt': FieldValue.serverTimestamp(),
+        'platform': Platform.operatingSystem
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
     final userDetails = Provider.of<User>(context);
+    saveDeviceToken(user.uid);
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(

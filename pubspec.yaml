@@ -20,7 +20,7 @@ dependencies:
   in_app_purchase: ^0.2.1
   firebase_admob: ^0.9.0
   share: ^0.6.2+1
-  quick_actions: ^0.3.0
+  cached_network_image: ^1.1.1
   google_sign_in: ^4.0.7
   firebase_messaging: ^5.1.5
 

@@ -9,7 +9,6 @@ import 'package:Baron/pages/upgrade_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/users/login.dart';
 import 'package:Baron/users/profile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'QuickActions Demo',
+        title: 'Baron',
         theme: ThemeData(primaryColor: Color.fromRGBO(231, 38, 61, 1)),
         home: QuickActionsManager(),
         routes: <String, WidgetBuilder>{
