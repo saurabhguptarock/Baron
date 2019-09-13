@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -61,9 +62,16 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(user.photoUrl),
-                            radius: 35,
+                          CachedNetworkImage(
+                            imageUrl: user.photoUrl,
+                            imageBuilder: (ctx, imageProvider) => CircleAvatar(
+                              backgroundImage: imageProvider,
+                              radius: 35,
+                            ),
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                           Row(
                             children: <Widget>[
