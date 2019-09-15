@@ -39,11 +39,6 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/collectibles/Classic/
-   - assets/collectibles/Epic/
-   - assets/collectibles/Legendary/
-   - assets/collectibles/Mythic/
-   - assets/collectibles/Rare/
    - assets/audio/
    - assets/images/
 
