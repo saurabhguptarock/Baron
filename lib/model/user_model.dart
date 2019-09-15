@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   final int followers;
   final int following;
@@ -32,6 +34,22 @@ class User {
       photoUrl: data['photoUrl'] ?? '',
       followers: data['followers'] ?? 0,
       following: data['following'] ?? 0,
+    );
+  }
+}
+
+class Collectible {
+  final String img;
+  final String name;
+  final String quality;
+
+  Collectible({this.img, this.name, this.quality});
+  factory Collectible.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data;
+    return Collectible(
+      img: data['img'] ?? '',
+      name: data['name'] ?? '',
+      quality: data['quality'] ?? '1',
     );
   }
 }

@@ -23,7 +23,10 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<FirebaseUser>.value(
           value: FirebaseAuth.instance.onAuthStateChanged,
-        )
+        ),
+        StreamProvider<List<Collectible>>.value(
+          value: firebaseService.streamCollectible(),
+        ),
       ],
       child: MaterialApp(
         title: 'Baron',

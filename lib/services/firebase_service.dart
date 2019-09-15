@@ -41,6 +41,16 @@ Stream<User> streamUser(String uid) {
       .map((snap) => User.fromMap(snap.data));
 }
 
+Stream<List<Collectible>> streamCollectible() {
+  return _firestore
+      .collection('collectibles')
+      // .orderBy('quality', descending: true)
+      .snapshots()
+      .map((list) => list.documents
+          .map((data) => Collectible.fromFirestore(data))
+          .toList());
+}
+
 void signOut() {
   _auth.signOut();
 }

@@ -69,7 +69,9 @@ class _HomePageState extends State<HomePage> {
                               radius: 35,
                             ),
                             placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                                CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),
