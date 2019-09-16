@@ -20,6 +20,25 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _messaging = FirebaseMessaging();
   final Firestore _firestore = Firestore.instance;
+  @override
+  void initState() {
+    super.initState();
+    _messaging.configure(onMessage: (Map<String, dynamic> message) async {
+      final snackbar = SnackBar(
+        content: Text(message['notification']['title']),
+        action: SnackBarAction(
+          label: 'Open',
+          onPressed: () => Navigator.of(context).pushNamed('/collectibles'),
+        ),
+      );
+      Scaffold.of(context).showSnackBar(snackbar);
+    }, onLaunch: (Map<String, dynamic> message) async {
+      Navigator.of(context).pushNamed('/collectibles');
+    }, onResume: (Map<String, dynamic> message) async {
+      Navigator.of(context).pushNamed('/collectibles');
+    });
+    _messaging.subscribeToTopic('collectibles');
+  }
 
   void saveDeviceToken(String uid) async {
     String token = await _messaging.getToken();
