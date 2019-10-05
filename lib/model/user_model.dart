@@ -4,6 +4,7 @@ class User {
   final int followers;
   final int following;
   final int noOfNotification;
+  final int soura;
 
   final String uid;
   final String email;
@@ -13,6 +14,7 @@ class User {
   final String badge;
 
   User({
+    this.soura,
     this.tyre,
     this.badge,
     this.noOfNotification,
@@ -34,6 +36,7 @@ class User {
       photoUrl: data['photoUrl'] ?? '',
       followers: data['followers'] ?? 0,
       following: data['following'] ?? 0,
+      soura: data['soura'] ?? 0,
     );
   }
 }

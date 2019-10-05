@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -272,6 +273,37 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('/soura');
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 15, bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          FontAwesomeIcons.coins,
+                          color: Colors.grey,
+                          size: 23,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                        ),
+                        Text(
+                          'Soura',
+                          style: TextStyle(
+                              fontFamily: 'OpenSans',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
                     Navigator.of(context).pushNamed('/upgrade');
                   },
                   child: Padding(
@@ -450,9 +482,27 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(top: 15),
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    final DynamicLinkParameters parameters =
+                        DynamicLinkParameters(
+                      uriPrefix: 'https://baron.page.link',
+                      link: Uri.parse('https://saverl.com/soura'),
+                      androidParameters: AndroidParameters(
+                          packageName: 'com.saverl.baron',
+                          fallbackUrl: Uri.parse('https://baron.saverl.com/')),
+                      iosParameters: IosParameters(
+                          bundleId: 'com.saverl.baron',
+                          fallbackUrl: Uri.parse('https://baron.saverl.com/')),
+                      socialMetaTagParameters: SocialMetaTagParameters(
+                        title: 'Baron',
+                        description: 'Download Baron a competitive game app',
+                      ),
+                    );
+                    final ShortDynamicLink dynamicUrl =
+                        await parameters.buildShortLink();
+                    final Uri shortUrl = dynamicUrl.shortUrl;
                     Share.share(
-                        'Download Baron a competitive game app. https://bit.ly/2lBMjfk');
+                        'Download Baron a competitive game app. $shortUrl');
                   },
                   child: Padding(
                     padding:

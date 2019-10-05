@@ -5,6 +5,7 @@ import 'package:Baron/pages/inventory_page.dart';
 import 'package:Baron/pages/leaderboard_page.dart';
 import 'package:Baron/pages/notification_page.dart';
 import 'package:Baron/pages/settings_page.dart';
+import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/pages/upgrade_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/users/login.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
           "/inventory": (BuildContext context) => InventoryPage(),
           "/settings": (BuildContext context) => SettingsPage(),
           "/notifications": (BuildContext context) => NotificationsPage(),
+          "/soura": (BuildContext context) => SouraPage(),
           "/home": (BuildContext context) => HomePage(),
         },
       ),
@@ -58,6 +60,33 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
     return checkIfLoggedIn(user);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.initDynamicLinks();
+  }
+
+  void initDynamicLinks() async {
+    final PendingDynamicLinkData data =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri deepLink = data?.link;
+    if (deepLink != null) {
+      Navigator.pushNamed(context, deepLink.path);
+    }
+
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+      final Uri deepLink = dynamicLink?.link;
+
+      if (deepLink != null) {
+        Navigator.pushNamed(context, deepLink.path);
+      }
+    }, onError: (OnLinkErrorException e) async {
+      print('onLinkError');
+      print(e.message);
+    });
   }
 
   Widget checkIfLoggedIn(FirebaseUser user) {
