@@ -725,35 +725,36 @@ class _HomePageState extends State<HomePage> {
                             size: 23,
                           ),
                         ),
-                        Positioned(
-                          right: 0,
-                          top: 3,
-                          child: Container(
-                            width: 17,
-                            height: 17,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              gradient: LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  Color.fromRGBO(222, 97, 59, 1),
-                                  Color.fromRGBO(231, 39, 61, 1)
-                                ],
+                        if (userDetails.noOfNotification != 0)
+                          Positioned(
+                            right: 0,
+                            top: 3,
+                            child: Container(
+                              width: 17,
+                              height: 17,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color.fromRGBO(222, 97, 59, 1),
+                                    Color.fromRGBO(231, 39, 61, 1)
+                                  ],
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${userDetails.noOfNotification}',
+                                  style: TextStyle(
+                                      fontFamily: 'OpenSans',
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                            child: Center(
-                              child: Text(
-                                '${userDetails.noOfNotification}',
-                                style: TextStyle(
-                                    fontFamily: 'OpenSans',
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        )
+                          )
                       ],
                     ),
                   ),

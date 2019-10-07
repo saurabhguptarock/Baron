@@ -74,7 +74,10 @@ class _SouraPageState extends State<SouraPage> {
                 children: <Widget>[
                   Text(
                     'Buy Soura',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'OpenSans'),
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -95,10 +98,16 @@ class _SouraPageState extends State<SouraPage> {
                                     '${prod.price}',
                                     style: TextStyle(fontSize: 18),
                                   ),
-                                  Text(
-                                    '${userDetails.badge}',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
+                                  RaisedButton(
+                                    onPressed: () => buyProduct(prod),
+                                    child: Text(
+                                      'Buy Now',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'OpenSans'),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -109,12 +118,15 @@ class _SouraPageState extends State<SouraPage> {
                 ],
               ),
             )
-          : Text('Purchase not Available'),
+          : Center(
+              child: Text(
+                'Purchase not Available',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'OpenSans'),
+              ),
+            ),
     );
-  }
-
-  upgradeAccount(ProductDetails prod) {
-    final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
-    _iap.buyNonConsumable(purchaseParam: purchaseParam);
   }
 }
