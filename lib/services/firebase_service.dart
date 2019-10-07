@@ -18,19 +18,27 @@ Future<void> login() async {
     idToken: googleAuth.idToken,
   );
   AuthResult result = await _auth.signInWithCredential(credential);
-
   createUserDatabase(result.user);
 }
 
 Future<void> createUserDatabase(FirebaseUser user) async {
-  var userRef = _firestore.document('users/${user.uid}');
-  var data = {
-    'uid': user.uid,
-    'photoUrl': user.photoUrl,
-    'name': user.displayName,
-    'email': user.email
-  };
-  userRef.setData(data, merge: true);
+  var doc = await _firestore.document('users/${user.uid}').get();
+  if (!doc.exists) {
+    var userRef = _firestore.document('users/${user.uid}');
+    var data = {
+      'uid': user.uid,
+      'photoUrl': user.photoUrl,
+      'name': user.displayName,
+      'email': user.email,
+      'noOfNotification': 0,
+      'tyre': 'Bronze',
+      'badge': 'Elite',
+      'followers': 0,
+      'following': 0,
+      'soura': 0,
+    };
+    userRef.setData(data, merge: true);
+  }
 }
 
 Stream<User> streamUser(String uid) {

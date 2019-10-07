@@ -1,7 +1,15 @@
 import 'dart:io';
 import 'package:Baron/model/user_model.dart';
+import 'package:Baron/pages/collectibles_page.dart';
+import 'package:Baron/pages/inventory_page.dart';
+import 'package:Baron/pages/leaderboard_page.dart';
+import 'package:Baron/pages/notification_page.dart';
+import 'package:Baron/pages/settings_page.dart';
+import 'package:Baron/pages/soura_page.dart';
+import 'package:Baron/pages/upgrade_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
+import 'package:Baron/users/profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -180,7 +188,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/profile');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: ProfilePage(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -211,7 +226,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/leaderboard');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: LeaderBoard(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -242,7 +264,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/inventory');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: InventoryPage(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -273,7 +302,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/soura');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: SouraPage(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -304,7 +340,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/upgrade');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: UpgradePage(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -335,7 +378,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/collectibles');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: CollectiblesPage(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -366,7 +416,13 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/notifications');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                          initialData: User.fromMap({}),
+                          value: firebaseService.streamUser(user.uid),
+                          child: NotificationsPage());
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -413,7 +469,14 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed('/settings');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return StreamProvider<User>.value(
+                        initialData: User.fromMap({}),
+                        value: firebaseService.streamUser(user.uid),
+                        child: SettingsPage(),
+                      );
+                    }));
                   },
                   child: Padding(
                     padding:
@@ -641,8 +704,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed('/notifications'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return StreamProvider<User>.value(
+                          initialData: User.fromMap({}),
+                          value: firebaseService.streamUser(user.uid),
+                          child: NotificationsPage(),
+                        );
+                      }));
+                    },
                     icon: Stack(
                       children: <Widget>[
                         Positioned(

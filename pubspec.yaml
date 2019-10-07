@@ -4,7 +4,7 @@ description: A new Flutter project.
 version: 1.0.2
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -34,13 +34,12 @@ flutter_icons:
   ios: true
   image_path: assets/images/icon.png
 
-
 flutter:
   uses-material-design: true
 
   assets:
-   - assets/audio/
-   - assets/images/
+    - assets/audio/
+    - assets/images/
 
   fonts:
     - family: OpenSans
