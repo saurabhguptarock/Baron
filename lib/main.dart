@@ -56,24 +56,49 @@ class QuickActionsManager extends StatefulWidget {
 }
 
 class _QuickActionsManagerState extends State<QuickActionsManager> {
+  FirebaseUser users;
+
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<FirebaseUser>(context);
     return checkIfLoggedIn(user);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    this.initDynamicLinks();
+  Widget loadDynamicLinkPage(String path) {
+    if (path == '/soura')
+      return SouraPage();
+    else if (path == '/profile')
+      return ProfilePage();
+    else if (path == '/inventory')
+      return InventoryPage();
+    else if (path == '/notifications')
+      return NotificationsPage();
+    else if (path == '/settings')
+      return SettingsPage();
+    else if (path == '/upgrade')
+      return UpgradePage();
+    else if (path == '/collectibles')
+      return CollectiblesPage();
+    else if (path == '/leaderboard')
+      return LeaderBoard();
+    else
+      return HomePage();
   }
 
-  void initDynamicLinks() async {
+  void initDynamicLinks(FirebaseUser user) async {
     final PendingDynamicLinkData data =
         await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri deepLink = data?.link;
     if (deepLink != null) {
-      Navigator.pushNamed(context, deepLink.path);
+      var path = deepLink.path;
+      Widget pathWidget = loadDynamicLinkPage(path);
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+        return StreamProvider<User>.value(
+          initialData: User.fromMap({}),
+          value: firebaseService.streamUser(user.uid),
+          child: pathWidget,
+        );
+      }));
     }
 
     FirebaseDynamicLinks.instance.onLink(
@@ -81,7 +106,15 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
       final Uri deepLink = dynamicLink?.link;
 
       if (deepLink != null) {
-        Navigator.pushNamed(context, deepLink.path);
+        var path = deepLink.path;
+        Widget pathWidget = loadDynamicLinkPage(path);
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+          return StreamProvider<User>.value(
+            initialData: User.fromMap({}),
+            value: firebaseService.streamUser(user.uid),
+            child: pathWidget,
+          );
+        }));
       }
     }, onError: (OnLinkErrorException e) async {
       print('onLinkError');
@@ -90,13 +123,14 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
   }
 
   Widget checkIfLoggedIn(FirebaseUser user) {
-    if (user != null)
+    if (user != null) {
+      initDynamicLinks(user);
       return StreamProvider<User>.value(
         initialData: User.fromMap({}),
         value: firebaseService.streamUser(user.uid),
         child: HomePage(),
       );
-    else
+    } else
       return LoginPage();
   }
 }

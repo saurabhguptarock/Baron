@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/background.png'),
+              image: AssetImage('assets/images/background.webp'),
               fit: BoxFit.cover),
         ),
         child: Column(
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(15),
                                   image: DecorationImage(
                                       image: AssetImage(
-                                          'assets/images/background.png'),
+                                          'assets/images/background.webp'),
                                       fit: BoxFit.cover),
                                 ),
                               ),

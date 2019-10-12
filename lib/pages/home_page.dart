@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                               CircleAvatar(
                                 radius: 20,
                                 backgroundImage: AssetImage(
-                                    'assets/images/${userDetails.badge}.png'),
+                                    'assets/images/${userDetails.badge}.webp'),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(right: 7),
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                                   CircleAvatar(
                                     radius: 10,
                                     backgroundImage: AssetImage(
-                                        'assets/images/${userDetails.tyre}.png'),
+                                        'assets/images/${userDetails.tyre}.webp'),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(right: 7),
@@ -717,7 +717,7 @@ class _HomePageState extends State<HomePage> {
                     icon: Stack(
                       children: <Widget>[
                         Positioned(
-                          top: 10,
+                          top: userDetails.noOfNotification != 0 ? 10 : 5,
                           right: 3,
                           child: Icon(
                             FontAwesomeIcons.bell,

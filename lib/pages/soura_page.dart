@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:Baron/model/user_model.dart';
+import 'package:Baron/shared/shared_UI.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
@@ -70,49 +72,127 @@ class _SouraPageState extends State<SouraPage> {
     return Scaffold(
       body: _isAvailable
           ? Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/souraPurchase.webp'),
+                    fit: BoxFit.cover),
+              ),
               child: Column(
                 children: <Widget>[
-                  Text(
-                    'Buy Soura',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'OpenSans'),
+                  SizedBox(
+                    height: MediaQuery.of(context).padding.top + 15,
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        for (var prod in _products)
-                          Card(
-                            child: Container(
-                              height: 200,
-                              width: 150,
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    '${prod.title}',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  Text(
-                                    '${prod.price}',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  RaisedButton(
-                                    onPressed: () => buyProduct(prod),
-                                    child: Text(
-                                      'Buy Now',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'OpenSans'),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Text(
+                        'Soura Purchase',
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'OpenSans'),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            '${userDetails.soura}',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans'),
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          Icon(
+                            FontAwesomeIcons.coins,
+                            color: Colors.yellowAccent,
+                            size: 30,
                           )
-                      ],
+                        ],
+                      ),
+                    ],
+                  ),
+                  ScrollConfiguration(
+                    behavior: MyBehavior(),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Card(
+                                child: Container(
+                                  height: 200,
+                                  width: 150,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        // '${_products[0].title}',
+                                        'Price',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      Text(
+                                        // '${_products[0].price}',
+                                        '500',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      RaisedButton(
+                                        onPressed: () =>
+                                            buyProduct(_products[0]),
+                                        child: Text(
+                                          'Buy Now',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'OpenSans'),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Card(
+                                child: Container(
+                                  height: 200,
+                                  width: 150,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        // '${_products[0].title}',
+                                        'Price',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      Text(
+                                        // '${_products[0].price}',
+                                        '500',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      RaisedButton(
+                                        onPressed: () =>
+                                            buyProduct(_products[0]),
+                                        child: Text(
+                                          'Buy Now',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'OpenSans'),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
