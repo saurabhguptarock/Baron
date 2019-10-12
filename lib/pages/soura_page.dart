@@ -115,86 +115,295 @@ class _SouraPageState extends State<SouraPage> {
                       ),
                     ],
                   ),
-                  ScrollConfiguration(
-                    behavior: MyBehavior(),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Card(
-                                child: Container(
-                                  height: 200,
-                                  width: 150,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        // '${_products[0].title}',
-                                        'Price',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      Text(
-                                        // '${_products[0].price}',
-                                        '500',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      RaisedButton(
-                                        onPressed: () =>
-                                            buyProduct(_products[0]),
-                                        child: Text(
-                                          'Buy Now',
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height - 100,
+                    child: ScrollConfiguration(
+                      behavior: MyBehavior(),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Card(
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 200,
+                                    width: 150,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                        ),
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/1.webp'),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          // '${_products[0].title}',
+                                          'Price',
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
                                               fontFamily: 'OpenSans'),
                                         ),
-                                      )
-                                    ],
+                                        RaisedButton(
+                                          onPressed: () =>
+                                              buyProduct(_products[0]),
+                                          child: Text(
+                                            // '${_products[0].price}',
+                                            'Buy Now',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Card(
-                                child: Container(
-                                  height: 200,
-                                  width: 150,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        // '${_products[0].title}',
-                                        'Price',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      Text(
-                                        // '${_products[0].price}',
-                                        '500',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      RaisedButton(
-                                        onPressed: () =>
-                                            buyProduct(_products[0]),
-                                        child: Text(
-                                          'Buy Now',
+                                Card(
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 200,
+                                    width: 150,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                        ),
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/2.webp'),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          // '${_products[0].title}',
+                                          'Price',
                                           style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
                                               fontFamily: 'OpenSans'),
                                         ),
-                                      )
-                                    ],
+                                        RaisedButton(
+                                          onPressed: () =>
+                                              buyProduct(_products[0]),
+                                          child: Text(
+                                            // '${_products[0].price}',
+                                            'Buy Now',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Card(
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 200,
+                                    width: 150,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                        ),
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/3.webp'),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          // '${_products[0].title}',
+                                          'Price',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: 'OpenSans'),
+                                        ),
+                                        RaisedButton(
+                                          onPressed: () =>
+                                              buyProduct(_products[0]),
+                                          child: Text(
+                                            // '${_products[0].price}',
+                                            'Buy Now',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 200,
+                                    width: 150,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                        ),
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/4.webp'),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          // '${_products[0].title}',
+                                          'Price',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: 'OpenSans'),
+                                        ),
+                                        RaisedButton(
+                                          onPressed: () =>
+                                              buyProduct(_products[0]),
+                                          child: Text(
+                                            // '${_products[0].price}',
+                                            'Buy Now',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Card(
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    height: 200,
+                                    width: 150,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                        ),
+                                        Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/5.webp'),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        Text(
+                                          // '${_products[0].title}',
+                                          'Price',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: 'OpenSans'),
+                                        ),
+                                        RaisedButton(
+                                          onPressed: () =>
+                                              buyProduct(_products[0]),
+                                          child: Text(
+                                            // '${_products[0].price}',
+                                            'Buy Now',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'OpenSans'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             )
