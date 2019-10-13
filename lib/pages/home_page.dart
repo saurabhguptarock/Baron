@@ -4,6 +4,7 @@ import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/inventory_page.dart';
 import 'package:Baron/pages/leaderboard_page.dart';
 import 'package:Baron/pages/notification_page.dart';
+import 'package:Baron/pages/searchuserprofile_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/pages/upgrade_page.dart';
@@ -24,6 +25,8 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
+
+final List<DocumentSnapshot> userList = [];
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -47,6 +50,12 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pushNamed('/collectibles');
     });
     _messaging.subscribeToTopic('collectibles');
+    final Firestore _firestore = Firestore.instance;
+
+    _firestore
+        .collection('users')
+        .getDocuments()
+        .then((val) => userList.addAll(val.documents));
   }
 
   void saveDeviceToken(String uid) async {
@@ -677,29 +686,33 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(27, 35, 47, 1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          Text(
-                            'Search for user or team...',
-                            style: TextStyle(
-                                fontFamily: 'OpenSans',
-                                fontSize: 12,
-                                color: Colors.white30),
-                          ),
-                          Icon(
-                            FontAwesomeIcons.search,
-                            color: Color.fromRGBO(253, 125, 73, 1),
-                            size: 13,
-                          )
-                        ],
+                    child: InkWell(
+                      onTap: () => showSearch(
+                          context: context, delegate: DataSearch(userDetails)),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(27, 35, 47, 1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                              'Search for user or team...',
+                              style: TextStyle(
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 12,
+                                  color: Colors.white30),
+                            ),
+                            Icon(
+                              FontAwesomeIcons.search,
+                              color: Color.fromRGBO(253, 125, 73, 1),
+                              size: 13,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -763,6 +776,91 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final User currentUser;
+
+  DataSearch(this.currentUser);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () => query = '',
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final List<DocumentSnapshot> users = query.isEmpty
+        ? userList
+        : userList
+            .where((p) =>
+                p.data['name'].toLowerCase().startsWith(query.toLowerCase()))
+            .toList();
+
+    return ListView.builder(
+      itemCount: users.length,
+      itemBuilder: (ctx, idx) => ListTile(
+        onTap: () {
+          close(context, null);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) {
+                return StreamProvider<User>.value(
+                  initialData: User.fromMap({}),
+                  value:
+                      firebaseService.streamUser("${users[idx].data['uid']}"),
+                  child: SearchUserProfile(
+                    currentUser: currentUser,
+                  ),
+                );
+              },
+            ),
+          );
+        },
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage("${users[idx].data['photoUrl']}"),
+        ),
+        title: RichText(
+          text: TextSpan(
+            text: '${users[idx].data['name']}'.substring(0, query.length),
+            style: TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontSize: 18),
+            children: [
+              TextSpan(
+                text: '${users[idx].data['name']}'.substring(query.length),
+                style: TextStyle(
+                    fontFamily: 'OpenSans', fontSize: 18, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

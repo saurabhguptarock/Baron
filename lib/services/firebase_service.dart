@@ -62,3 +62,17 @@ Stream<List<Collectible>> streamCollectible() {
 void signOut() {
   _auth.signOut();
 }
+
+void updateFollowers(String uid) {
+  _firestore
+      .collection('users')
+      .document(uid)
+      .updateData({'followers': FieldValue.increment(1)});
+}
+
+void updateFollowing(String uid) {
+  _firestore
+      .collection('users')
+      .document(uid)
+      .updateData({'following': FieldValue.increment(1)});
+}
