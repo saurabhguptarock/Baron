@@ -645,20 +645,8 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 85),
                     child: Container(
-                      color: Colors.yellow,
-                      height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
-                      child: Center(
-                        child: Text('asdasd'),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.red,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Text('asdasd'),
+                      child: Center(),
                     ),
                   ),
                 ],
