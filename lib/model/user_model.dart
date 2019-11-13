@@ -56,3 +56,21 @@ class Collectible {
     );
   }
 }
+
+class RecentActivity {
+  final String img;
+  final String name;
+  final String time;
+  final bool wasIncoming;
+
+  RecentActivity({this.img, this.name, this.time, this.wasIncoming});
+  factory RecentActivity.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data;
+    return RecentActivity(
+      img: data['img'] ?? '',
+      name: data['name'] ?? '',
+      time: data['time'] ?? '',
+      wasIncoming: data['wasIncoming'] ?? false,
+    );
+  }
+}

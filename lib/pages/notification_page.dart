@@ -10,16 +10,50 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 50, left: 20),
-            child: IconButton(
-              icon: Icon(FontAwesomeIcons.arrowLeft),
-              onPressed: () => Navigator.of(context).pop(),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: Color.fromRGBO(23, 31, 42, 1),
+        actions: <Widget>[
+          InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: Icon(
+                FontAwesomeIcons.redoAlt,
+                size: 17,
+                color: Colors.white,
+              ),
             ),
-          )
+          ),
+          InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 20),
+              child: Icon(
+                FontAwesomeIcons.ellipsisV,
+                size: 17,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
+        title: Text(
+          'Notifications',
+          style: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[],
       ),
     );
   }

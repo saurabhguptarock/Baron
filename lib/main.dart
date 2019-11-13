@@ -1,15 +1,11 @@
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/home_page.dart';
-import 'package:Baron/pages/inventory_page.dart';
-import 'package:Baron/pages/leaderboard_page.dart';
 import 'package:Baron/pages/notification_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
-import 'package:Baron/pages/upgrade_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/users/login.dart';
-import 'package:Baron/users/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +27,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Baron',
-        theme: ThemeData(primaryColor: Color.fromRGBO(231, 38, 61, 1)),
+        theme: ThemeData(primaryColor: Colors.white),
         home: QuickActionsManager(),
         routes: <String, WidgetBuilder>{
-          "/profile": (BuildContext context) => ProfilePage(),
           "/login": (BuildContext context) => LoginPage(),
-          "/upgrade": (BuildContext context) => UpgradePage(),
-          "/leaderboard": (BuildContext context) => LeaderBoard(),
           "/collectibles": (BuildContext context) => CollectiblesPage(),
-          "/inventory": (BuildContext context) => InventoryPage(),
           "/settings": (BuildContext context) => SettingsPage(),
           "/notifications": (BuildContext context) => NotificationsPage(),
           "/soura": (BuildContext context) => SouraPage(),
@@ -67,20 +59,12 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
   Widget loadDynamicLinkPage(String path) {
     if (path == '/soura')
       return SouraPage();
-    else if (path == '/profile')
-      return ProfilePage();
-    else if (path == '/inventory')
-      return InventoryPage();
     else if (path == '/notifications')
       return NotificationsPage();
     else if (path == '/settings')
       return SettingsPage();
-    else if (path == '/upgrade')
-      return UpgradePage();
     else if (path == '/collectibles')
       return CollectiblesPage();
-    else if (path == '/leaderboard')
-      return LeaderBoard();
     else
       return HomePage();
   }
@@ -128,7 +112,9 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
       return StreamProvider<User>.value(
         initialData: User.fromMap({}),
         value: firebaseService.streamUser(user.uid),
-        child: HomePage(),
+        child: StreamProvider<List<RecentActivity>>.value(
+            value: firebaseService.streamRecentActivity(user.uid),
+            child: HomePage()),
       );
     } else
       return LoginPage();
