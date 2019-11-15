@@ -112,8 +112,8 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
       return StreamProvider<User>.value(
         initialData: User.fromMap({}),
         value: firebaseService.streamUser(user.uid),
-        child: StreamProvider<List<RecentActivity>>.value(
-            value: firebaseService.streamRecentActivity(user.uid),
+        child: StreamProvider<List<PhoneDetails>>.value(
+            value: firebaseService.streamPhoneDetails(user.uid),
             child: HomePage()),
       );
     } else

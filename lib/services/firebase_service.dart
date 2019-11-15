@@ -49,14 +49,14 @@ Stream<User> streamUser(String uid) {
       .map((snap) => User.fromMap(snap.data));
 }
 
-Stream<List<RecentActivity>> streamRecentActivity(String uid) {
+Stream<List<PhoneDetails>> streamPhoneDetails(String uid) {
   return _firestore
       .collection('users')
       .document(uid)
-      .collection('recentActivity')
+      .collection('phoneDetails')
       .snapshots()
       .map((list) => list.documents
-          .map((data) => RecentActivity.fromFirestore(data))
+          .map((data) => PhoneDetails.fromFirestore(data))
           .toList());
 }
 

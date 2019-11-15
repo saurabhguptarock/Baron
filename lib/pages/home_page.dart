@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:Baron/model/user_model.dart';
+import 'package:Baron/pages/chat_page.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/notification_page.dart';
+import 'package:Baron/pages/phone_call_page.dart';
 import 'package:Baron/pages/searchuserprofile_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
@@ -17,15 +19,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:math' as math;
+// import 'package:flutter_tts/flutter_tts.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
+int currentIndex = 0;
 final List<DocumentSnapshot> userList = [];
 
 class _HomePageState extends State<HomePage>
@@ -33,6 +36,7 @@ class _HomePageState extends State<HomePage>
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _messaging = FirebaseMessaging();
   final Firestore _firestore = Firestore.instance;
+  // FlutterTts flutterTts = FlutterTts();
   @override
   void initState() {
     super.initState();
@@ -75,39 +79,52 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  // Future speak() async {
+  //   await flutterTts.speak("    maai pagal hu mujhe ghar jana hai");
+  //   await flutterTts.setLanguage("hi-IN");
+  //   await flutterTts.setVoice('hi-in-x-hid-network');
+  //   await flutterTts.setSpeechRate(0.8);
+  // }
+
+  void onTabTapped(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
     final userDetails = Provider.of<User>(context);
-    final recentActivity = Provider.of<List<RecentActivity>>(context);
+    final phoneDetails = Provider.of<List<PhoneDetails>>(context);
     saveDeviceToken(user.uid);
     return Scaffold(
-      key: _scaffoldKey,
-      floatingActionButton: SpeedDial(
-        tooltip: 'Functions',
-        backgroundColor: Color.fromRGBO(16, 24, 30, 1),
-        animatedIcon: AnimatedIcons.menu_close,
-        children: [
-          SpeedDialChild(
-            backgroundColor: Colors.red,
-            onTap: () {},
-            label: 'Start a new call',
-            child: Icon(FontAwesomeIcons.phoneAlt),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (i) => onTabTapped(i),
+        backgroundColor: Color.fromRGBO(23, 31, 42, 1),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              FontAwesomeIcons.solidCommentAlt,
+              color: Colors.white,
+              size: currentIndex == 0 ? 27 : 18,
+            ),
+            title: SizedBox.shrink(),
           ),
-          SpeedDialChild(
-            backgroundColor: Colors.green,
-            onTap: () {},
-            label: 'Start a new chat',
-            child: Icon(FontAwesomeIcons.sms),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.phoneAlt,
+                color: Colors.white, size: currentIndex == 1 ? 27 : 18),
+            title: SizedBox.shrink(),
           ),
-          SpeedDialChild(
-            backgroundColor: Colors.yellow,
-            onTap: () {},
-            label: 'Start a new video call',
-            child: Icon(FontAwesomeIcons.video),
+          BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.video,
+                color: Colors.white, size: currentIndex == 2 ? 27 : 18),
+            title: SizedBox.shrink(),
           ),
         ],
       ),
+      key: _scaffoldKey,
       drawer: Drawer(
         child: Container(
           color: Color.fromRGBO(27, 36, 48, 1),
@@ -133,11 +150,8 @@ class _HomePageState extends State<HomePage>
                             radius: 35,
                           ),
                           placeholder: (context, url) => Shimmer(
-                            gradient: LinearGradient(colors: [
-                              Color.fromRGBO(221, 221, 221, 1),
-                              Colors.white,
-                              Color.fromRGBO(221, 221, 221, 1),
-                            ]),
+                            gradient: LinearGradient(
+                                colors: [Colors.grey, Colors.white]),
                             child: CircleAvatar(
                               radius: 25,
                             ),
@@ -475,39 +489,52 @@ class _HomePageState extends State<HomePage>
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  if (recentActivity != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 85),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 85),
+                  ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     color: Color.fromRGBO(27, 36, 48, 1),
-                    child: recentActivity != null
-                        ? recentActivity.length > 0
-                            ? ListView.builder(
-                                itemCount: recentActivity.length,
-                                itemBuilder: (ctx, i) =>
-                                    recentActivityCard(recentActivity[i]),
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  RaisedButton(
-                                    onPressed: () {},
-                                  ),
-                                  Text('data'),
-                                ],
-                              )
-                        : ListView.builder(
-                            itemCount: 9,
-                            itemBuilder: (ctx, i) => recentActivityCard(
-                                RecentActivity(
-                                    img: '',
-                                    name: '',
-                                    time: '',
-                                    wasIncoming: false)),
-                          ),
+                    child: currentIndex == 0
+                        ? Text(
+                            'Chat',
+                            style: TextStyle(color: Colors.white),
+                          )
+                        : currentIndex == 1
+                            ? phoneDetails != null
+                                ? phoneDetails.length > 0
+                                    ? ListView.builder(
+                                        itemCount: phoneDetails.length,
+                                        itemBuilder: (ctx, i) =>
+                                            phoneDetailsCard(phoneDetails[i]),
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          RaisedButton(
+                                            onPressed: () {},
+                                          ),
+                                          Text('data'),
+                                        ],
+                                      )
+                                : ListView.builder(
+                                    itemCount: 1,
+                                    itemBuilder: (ctx, i) => Shimmer(
+                                      gradient: LinearGradient(
+                                          colors: [Colors.grey, Colors.white]),
+                                      child: phoneDetailsCard(PhoneDetails(
+                                          img: '${userDetails.photoUrl}',
+                                          name: '${userDetails.name}',
+                                          time: '00:00',
+                                          wasIncoming: false)),
+                                    ),
+                                  )
+                            : Text(
+                                'Video',
+                                style: TextStyle(color: Colors.white),
+                              ),
                   ),
                 ],
               ),
@@ -629,7 +656,7 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-Widget recentActivityCard(RecentActivity recentActivity) {
+Widget phoneDetailsCard(PhoneDetails phoneDetails) {
   return Slidable(
     actionPane: SlidableDrawerActionPane(),
     actionExtentRatio: 0.25,
@@ -645,17 +672,13 @@ Widget recentActivityCard(RecentActivity recentActivity) {
         onLongPress: () {},
         onTap: () {},
         leading: CachedNetworkImage(
-          imageUrl: recentActivity.img,
+          imageUrl: phoneDetails.img,
           imageBuilder: (ctx, imageProvider) => CircleAvatar(
             backgroundImage: imageProvider,
             radius: 25,
           ),
           placeholder: (context, url) => Shimmer(
-            gradient: LinearGradient(colors: [
-              Color.fromRGBO(221, 221, 221, 1),
-              Colors.white,
-              Color.fromRGBO(221, 221, 221, 1),
-            ]),
+            gradient: LinearGradient(colors: [Colors.grey, Colors.white]),
             child: CircleAvatar(
               radius: 25,
             ),
@@ -663,7 +686,7 @@ Widget recentActivityCard(RecentActivity recentActivity) {
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         title: Text(
-          '${recentActivity.name}',
+          '${phoneDetails.name}',
           style: TextStyle(
               fontFamily: 'OpenSans',
               fontSize: 18,
@@ -675,7 +698,7 @@ Widget recentActivityCard(RecentActivity recentActivity) {
             Transform.rotate(
               angle: -math.pi / 4,
               child: Icon(
-                recentActivity.wasIncoming == false
+                phoneDetails.wasIncoming == false
                     ? Icons.arrow_forward
                     : Icons.arrow_back,
                 color: Colors.green,
@@ -686,7 +709,7 @@ Widget recentActivityCard(RecentActivity recentActivity) {
               padding: EdgeInsets.only(right: 5),
             ),
             Text(
-              '${recentActivity.time}',
+              '${phoneDetails.time}',
               style: TextStyle(
                 fontFamily: 'OpenSans',
                 color: Colors.white,
@@ -754,26 +777,37 @@ class DataSearch extends SearchDelegate<String> {
             .where((p) =>
                 p.data['name'].toLowerCase().startsWith(query.toLowerCase()))
             .toList();
-
     return ListView.builder(
       itemCount: users.length,
       itemBuilder: (ctx, idx) => ListTile(
         onTap: () {
+          print(currentIndex);
           close(context, null);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) {
-                return StreamProvider<User>.value(
-                  initialData: User.fromMap({}),
-                  value:
-                      firebaseService.streamUser("${users[idx].data['uid']}"),
-                  child: SearchUserProfile(
-                    currentUser: currentUser,
-                  ),
-                );
-              },
-            ),
-          );
+          if (currentIndex == 0) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => ChatPage(
+                  userOnChat: users[idx].data,
+                ),
+              ),
+            );
+          } else if (currentIndex == 1) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => PhoneCallPage(
+                  userOnPhone: users[idx].data,
+                ),
+              ),
+            );
+          } else {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => ChatPage(
+                  userOnChat: users[idx].data,
+                ),
+              ),
+            );
+          }
         },
         leading: CircleAvatar(
           backgroundImage: NetworkImage("${users[idx].data['photoUrl']}"),

@@ -63,11 +63,8 @@ class _CollectiblesPageState extends State<CollectiblesPage> {
                     ),
                   ),
                   placeholder: (context, url) => Shimmer(
-                    gradient: LinearGradient(colors: [
-                      Color.fromRGBO(221, 221, 221, 1),
-                      Colors.white,
-                      Color.fromRGBO(221, 221, 221, 1),
-                    ]),
+                    gradient:
+                        LinearGradient(colors: [Colors.grey, Colors.white]),
                     child: CircleAvatar(
                       radius: 25,
                     ),
@@ -112,11 +109,8 @@ class _CollectiblesPageState extends State<CollectiblesPage> {
                       ),
                     ),
                     placeholder: (context, url) => Shimmer(
-                      gradient: LinearGradient(colors: [
-                        Color.fromRGBO(221, 221, 221, 1),
-                        Colors.white,
-                        Color.fromRGBO(221, 221, 221, 1),
-                      ]),
+                      gradient:
+                          LinearGradient(colors: [Colors.grey, Colors.white]),
                       child: CircleAvatar(
                         radius: 25,
                       ),
