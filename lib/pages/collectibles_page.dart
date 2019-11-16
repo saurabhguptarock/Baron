@@ -1,9 +1,7 @@
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/shared/shared_UI.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CollectiblesPage extends StatefulWidget {
   @override
@@ -50,26 +48,15 @@ class _CollectiblesPageState extends State<CollectiblesPage> {
             appBar: AppBar(),
             body: Column(
               children: <Widget>[
-                CachedNetworkImage(
-                  imageUrl: collectible.img,
-                  imageBuilder: (ctx, imageProvider) => Container(
-                    height: 100,
-                    width: 100,
-                    child: Hero(
-                      tag: collectible.name,
-                      child: Image(
-                        image: imageProvider,
-                      ),
+                Container(
+                  height: 100,
+                  width: 100,
+                  child: Hero(
+                    tag: collectible.name,
+                    child: Image(
+                      image: NetworkImage(collectible.img),
                     ),
                   ),
-                  placeholder: (context, url) => Shimmer(
-                    gradient:
-                        LinearGradient(colors: [Colors.grey, Colors.white]),
-                    child: CircleAvatar(
-                      radius: 25,
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 Center(
                   child: Text(collectible.name),
@@ -95,29 +82,17 @@ class _CollectiblesPageState extends State<CollectiblesPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: CachedNetworkImage(
-                    imageUrl: collectible.img,
-                    imageBuilder: (ctx, imageProvider) => CircleAvatar(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: CircleAvatar(
                       backgroundColor: Color.fromRGBO(27, 36, 48, 1),
                       radius: 45,
                       child: Hero(
                         tag: collectible.name,
                         child: Image(
-                          image: imageProvider,
+                          image: NetworkImage(collectible.img),
                         ),
                       ),
-                    ),
-                    placeholder: (context, url) => Shimmer(
-                      gradient:
-                          LinearGradient(colors: [Colors.grey, Colors.white]),
-                      child: CircleAvatar(
-                        radius: 25,
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                ),
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: Column(

@@ -9,17 +9,14 @@ import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:shimmer/shimmer.dart';
 import 'dart:math' as math;
 // import 'package:flutter_tts/flutter_tts.dart';
 
@@ -143,21 +140,9 @@ class _HomePageState extends State<HomePage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        CachedNetworkImage(
-                          imageUrl: user.photoUrl,
-                          imageBuilder: (ctx, imageProvider) => CircleAvatar(
-                            backgroundImage: imageProvider,
-                            radius: 35,
-                          ),
-                          placeholder: (context, url) => Shimmer(
-                            gradient: LinearGradient(
-                                colors: [Colors.grey, Colors.white]),
-                            child: CircleAvatar(
-                              radius: 25,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(user.photoUrl),
+                          radius: 35,
                         ),
                         Row(
                           children: <Widget>[
@@ -521,16 +506,12 @@ class _HomePageState extends State<HomePage>
                                       )
                                 : ListView.builder(
                                     itemCount: 1,
-                                    itemBuilder: (ctx, i) => Shimmer(
-                                      gradient: LinearGradient(
-                                          colors: [Colors.grey, Colors.white]),
-                                      child: phoneDetailsCard(PhoneDetails(
-                                          img: '${userDetails.photoUrl}',
-                                          name: '${userDetails.name}',
-                                          time: '00:00',
-                                          wasIncoming: false)),
-                                    ),
-                                  )
+                                    itemBuilder: (ctx, i) => phoneDetailsCard(
+                                        PhoneDetails(
+                                            img: '${userDetails.photoUrl}',
+                                            name: '${userDetails.name}',
+                                            time: '00:00',
+                                            wasIncoming: false)))
                             : Text(
                                 'Video',
                                 style: TextStyle(color: Colors.white),
@@ -657,84 +638,54 @@ class _HomePageState extends State<HomePage>
 }
 
 Widget phoneDetailsCard(PhoneDetails phoneDetails) {
-  return Slidable(
-    actionPane: SlidableDrawerActionPane(),
-    actionExtentRatio: 0.25,
-    child: Container(
-      child: ListTile(
-        trailing: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            FontAwesomeIcons.sms,
+  return Container(
+    child: ListTile(
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(
+          FontAwesomeIcons.sms,
+          color: Colors.white,
+        ),
+      ),
+      onLongPress: () {},
+      onTap: () {},
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(phoneDetails.img),
+        radius: 25,
+      ),
+      title: Text(
+        '${phoneDetails.name}',
+        style: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
             color: Colors.white,
-          ),
-        ),
-        onLongPress: () {},
-        onTap: () {},
-        leading: CachedNetworkImage(
-          imageUrl: phoneDetails.img,
-          imageBuilder: (ctx, imageProvider) => CircleAvatar(
-            backgroundImage: imageProvider,
-            radius: 25,
-          ),
-          placeholder: (context, url) => Shimmer(
-            gradient: LinearGradient(colors: [Colors.grey, Colors.white]),
-            child: CircleAvatar(
-              radius: 25,
+            fontWeight: FontWeight.bold),
+      ),
+      subtitle: Row(
+        children: <Widget>[
+          Transform.rotate(
+            angle: -math.pi / 4,
+            child: Icon(
+              phoneDetails.wasIncoming == false
+                  ? Icons.arrow_forward
+                  : Icons.arrow_back,
+              color: Colors.green,
+              size: 18,
             ),
           ),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
-        title: Text(
-          '${phoneDetails.name}',
-          style: TextStyle(
+          Padding(
+            padding: EdgeInsets.only(right: 5),
+          ),
+          Text(
+            '${phoneDetails.time}',
+            style: TextStyle(
               fontFamily: 'OpenSans',
-              fontSize: 18,
               color: Colors.white,
-              fontWeight: FontWeight.bold),
-        ),
-        subtitle: Row(
-          children: <Widget>[
-            Transform.rotate(
-              angle: -math.pi / 4,
-              child: Icon(
-                phoneDetails.wasIncoming == false
-                    ? Icons.arrow_forward
-                    : Icons.arrow_back,
-                color: Colors.green,
-                size: 18,
-              ),
             ),
-            Padding(
-              padding: EdgeInsets.only(right: 5),
-            ),
-            Text(
-              '${phoneDetails.time}',
-              style: TextStyle(
-                fontFamily: 'OpenSans',
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     ),
-    actions: <Widget>[
-      IconSlideAction(
-        color: Colors.green,
-        foregroundColor: Colors.white,
-        icon: FontAwesomeIcons.phoneAlt,
-        onTap: () {},
-      ),
-    ],
-    secondaryActions: <Widget>[
-      IconSlideAction(
-        color: Colors.green,
-        foregroundColor: Colors.white,
-        icon: FontAwesomeIcons.video,
-        onTap: () {},
-      ),
-    ],
   );
 }
 

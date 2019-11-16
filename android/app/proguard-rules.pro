@@ -7,7 +7,12 @@
 -keep class io.flutter.plugins.**  { *; }
 -keep class com.dexterous.** { *; }
 -keep class com.google.android.gms.** { *; }
--dontwarn com.google.android.gms.**
 -keep class com.google.common.** { *; }
+-dontwarn com.google.android.gms.**
 -dontwarn com.google.common.**
 -dontwarn android.**
+-dontwarn io.flutter.embedding.**
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}

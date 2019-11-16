@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../video_call/pages/index.dart';
 
 class PhoneCallPage extends StatefulWidget {
   final Map<String, dynamic> userOnPhone;
@@ -15,6 +16,7 @@ class _PhoneCallPageState extends State<PhoneCallPage> {
       appBar: AppBar(
         title: Text('${widget.userOnPhone['name']}+1+1'),
       ),
+      body: IndexPage(),
     );
   }
 }
