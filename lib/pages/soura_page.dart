@@ -44,12 +44,28 @@ class _SouraPageState extends State<SouraPage> {
   }
 
   Future<void> _getProducts() async {
-    Set<String> ids = Set.from(['elements']);
+    Set<String> ids = Set.from([
+      '1_soura',
+      '2_soura',
+      '3_soura',
+      '4_soura',
+      '5_soura',
+    ]);
     ProductDetailsResponse response = await _iap.queryProductDetails(ids);
     setState(() {
       _products = response.productDetails;
     });
   }
+
+  // Future<void> _getPastPurchases() async {
+  //   QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
+  //   for (PurchaseDetails purchase in response.pastPurchases) {
+  //     if (Platform.isIOS) _iap.completePurchase(purchase);
+  //   }
+  //   setState(() {
+  //     _purchases = response.pastPurchases;
+  //   });
+  // }
 
   PurchaseDetails _hasPurchased(String productId) {
     return _purchases.firstWhere((purchase) => purchase.productID == productId,
@@ -159,8 +175,7 @@ class _SouraPageState extends State<SouraPage> {
                                           height: 30,
                                         ),
                                         Text(
-                                          // '${_products[0].title}',
-                                          'Price',
+                                          '${_products[0].title}',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontFamily: 'OpenSans'),
@@ -169,8 +184,7 @@ class _SouraPageState extends State<SouraPage> {
                                           onPressed: () =>
                                               buyProduct(_products[0]),
                                           child: Text(
-                                            // '${_products[0].price}',
-                                            'Buy Now',
+                                            '${_products[0].price}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -209,8 +223,7 @@ class _SouraPageState extends State<SouraPage> {
                                           height: 30,
                                         ),
                                         Text(
-                                          // '${_products[0].title}',
-                                          'Price',
+                                          '${_products[1].title}',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontFamily: 'OpenSans'),
@@ -219,8 +232,7 @@ class _SouraPageState extends State<SouraPage> {
                                           onPressed: () =>
                                               buyProduct(_products[0]),
                                           child: Text(
-                                            // '${_products[0].price}',
-                                            'Buy Now',
+                                            '${_products[1].price}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -267,8 +279,7 @@ class _SouraPageState extends State<SouraPage> {
                                           height: 30,
                                         ),
                                         Text(
-                                          // '${_products[0].title}',
-                                          'Price',
+                                          '${_products[2].title}',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontFamily: 'OpenSans'),
@@ -277,8 +288,7 @@ class _SouraPageState extends State<SouraPage> {
                                           onPressed: () =>
                                               buyProduct(_products[0]),
                                           child: Text(
-                                            // '${_products[0].price}',
-                                            'Buy Now',
+                                            '${_products[2].price}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -317,8 +327,7 @@ class _SouraPageState extends State<SouraPage> {
                                           height: 30,
                                         ),
                                         Text(
-                                          // '${_products[0].title}',
-                                          'Price',
+                                          '${_products[3].title}',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontFamily: 'OpenSans'),
@@ -327,8 +336,7 @@ class _SouraPageState extends State<SouraPage> {
                                           onPressed: () =>
                                               buyProduct(_products[0]),
                                           child: Text(
-                                            // '${_products[0].price}',
-                                            'Buy Now',
+                                            '${_products[3].price}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -375,8 +383,7 @@ class _SouraPageState extends State<SouraPage> {
                                           height: 30,
                                         ),
                                         Text(
-                                          // '${_products[0].title}',
-                                          'Price',
+                                          '${_products[4].title}',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontFamily: 'OpenSans'),
@@ -385,8 +392,7 @@ class _SouraPageState extends State<SouraPage> {
                                           onPressed: () =>
                                               buyProduct(_products[0]),
                                           child: Text(
-                                            // '${_products[0].price}',
-                                            'Buy Now',
+                                            '${_products[4].price}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
