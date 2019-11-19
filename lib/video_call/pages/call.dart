@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../utils/settings.dart';
+// import 'package:screen/screen.dart';
 
 class CallPage extends StatefulWidget {
   /// non-modifiable channel name of the page
@@ -12,7 +14,7 @@ class CallPage extends StatefulWidget {
 
   @override
   _CallPageState createState() {
-    return new _CallPageState();
+    return _CallPageState();
   }
 }
 
@@ -21,6 +23,24 @@ class _CallPageState extends State<CallPage> {
   final _infoStrings = <String>[];
   bool muted = false;
 
+  Future<void> keepScreenAwake() async {
+    const platform = MethodChannel('com.saverl.baron/awake');
+    try {
+      final ans = await platform.invokeMethod('keepScreenAwake');
+      print('Keping screen on ' + ans);
+    } on PlatformException catch (e) {
+      print('Some Error Occured' + e.message);
+    }
+  }
+
+  Future<void> keepScreenNormal() async {
+    const platform = MethodChannel('com.saverl.baron/awake');
+    try {
+      final ans = await platform.invokeMethod('keepScreenNormal');
+      print('Keping screen on ' + ans);
+    } on PlatformException catch (e) {}
+  }
+
   @override
   void dispose() {
     // clear users
@@ -28,6 +48,7 @@ class _CallPageState extends State<CallPage> {
     // destroy sdk
     AgoraRtcEngine.leaveChannel();
     AgoraRtcEngine.destroy();
+    keepScreenNormal();
     super.dispose();
   }
 
@@ -35,6 +56,7 @@ class _CallPageState extends State<CallPage> {
   void initState() {
     super.initState();
     // initialize agora sdk
+    keepScreenAwake();
     initialize();
   }
 
@@ -119,23 +141,33 @@ class _CallPageState extends State<CallPage> {
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     List<Widget> list = [AgoraRenderWidget(0, local: true, preview: true)];
-    _users.forEach((int uid) => {list.add(AgoraRenderWidget(uid))});
+    _users.forEach((int uid) => {
+          list.add(
+            AgoraRenderWidget(uid),
+          )
+        });
     return list;
   }
 
   /// Video view wrapper
   Widget _videoView(view) {
-    return Expanded(child: Container(child: view));
+    return Expanded(
+      child: Container(child: view),
+    );
   }
 
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
-    List<Widget> wrappedViews =
-        views.map((Widget view) => _videoView(view)).toList();
+    List<Widget> wrappedViews = views
+        .map(
+          (Widget view) => _videoView(view),
+        )
+        .toList();
     return Expanded(
-        child: Row(
-      children: wrappedViews,
-    ));
+      child: Row(
+        children: wrappedViews,
+      ),
+    );
   }
 
   /// Video layout wrapper
@@ -144,33 +176,45 @@ class _CallPageState extends State<CallPage> {
     switch (views.length) {
       case 1:
         return Container(
-            child: Column(
-          children: <Widget>[_videoView(views[0])],
-        ));
+          child: Column(
+            children: <Widget>[_videoView(views[0])],
+          ),
+        );
       case 2:
         return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow([views[0]]),
-            _expandedVideoRow([views[1]])
-          ],
-        ));
+          child: Column(
+            children: <Widget>[
+              _expandedVideoRow([views[0]]),
+              _expandedVideoRow([views[1]])
+            ],
+          ),
+        );
       case 3:
         return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 3))
-          ],
-        ));
+          child: Column(
+            children: <Widget>[
+              _expandedVideoRow(
+                views.sublist(0, 2),
+              ),
+              _expandedVideoRow(
+                views.sublist(2, 3),
+              )
+            ],
+          ),
+        );
       case 4:
         return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 4))
-          ],
-        ));
+          child: Column(
+            children: <Widget>[
+              _expandedVideoRow(
+                views.sublist(0, 2),
+              ),
+              _expandedVideoRow(
+                views.sublist(2, 4),
+              )
+            ],
+          ),
+        );
       default:
     }
     return Container();
@@ -186,36 +230,36 @@ class _CallPageState extends State<CallPage> {
         children: <Widget>[
           RawMaterialButton(
             onPressed: () => _onToggleMute(),
-            child: new Icon(
-              muted ? Icons.mic : Icons.mic_off,
+            child: Icon(
+              muted ? Icons.mic_off : Icons.mic,
               color: muted ? Colors.white : Colors.blueAccent,
               size: 20.0,
             ),
-            shape: new CircleBorder(),
+            shape: CircleBorder(),
             elevation: 2.0,
             fillColor: muted ? Colors.blueAccent : Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
             onPressed: () => _onCallEnd(context),
-            child: new Icon(
+            child: Icon(
               Icons.call_end,
               color: Colors.white,
               size: 35.0,
             ),
-            shape: new CircleBorder(),
+            shape: CircleBorder(),
             elevation: 2.0,
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
           ),
           RawMaterialButton(
             onPressed: () => _onSwitchCamera(),
-            child: new Icon(
+            child: Icon(
               Icons.switch_camera,
               color: Colors.blueAccent,
               size: 20.0,
             ),
-            shape: new CircleBorder(),
+            shape: CircleBorder(),
             elevation: 2.0,
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
@@ -243,10 +287,12 @@ class _CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(
-            child: Stack(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Stack(
           children: <Widget>[_viewRows(), _toolbar()],
-        )));
+        ),
+      ),
+    );
   }
 }
