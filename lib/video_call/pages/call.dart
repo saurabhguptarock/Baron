@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:Baron/shared/shared_UI.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +39,9 @@ class _CallPageState extends State<CallPage> {
     try {
       final ans = await platform.invokeMethod('keepScreenNormal');
       print('Keping screen on ' + ans);
-    } on PlatformException catch (e) {}
+    } on PlatformException catch (e) {
+      print('Some Error Occured' + e.message);
+    }
   }
 
   @override
@@ -277,6 +280,7 @@ class _CallPageState extends State<CallPage> {
     setState(() {
       muted = !muted;
     });
+    muted ? showToast('Muted') : showToast('Un Muted');
     AgoraRtcEngine.muteLocalAudioStream(muted);
   }
 

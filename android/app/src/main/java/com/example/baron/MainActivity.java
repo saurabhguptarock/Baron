@@ -9,6 +9,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.MethodCall;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class MainActivity extends FlutterActivity {
 
@@ -25,6 +26,9 @@ public class MainActivity extends FlutterActivity {
           result.success("Done");
         } else if (call.method.equals("keepScreenNormal")) {
           keepScreenNormal();
+          result.success("Done");
+        } else if (call.method.equals("showToast")) {
+          Toast.makeText(getApplicationContext() ,call.argument("text") ,Toast.LENGTH_SHORT).show();
           result.success("Done");
         } else {
           result.error("UNAVAILABLE", "Could not set It", null);
