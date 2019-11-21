@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:Baron/main.dart';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/shared/shared_UI.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _SouraPageState extends State<SouraPage> {
   void _initialize() async {
     _isAvailable = await _iap.isAvailable();
     if (_isAvailable) {
-      await _getProducts();
+      _products = appProducts;
       _subscription = _iap.purchaseUpdatedStream.listen((data) {
         setState(() {
           if (data[0].status == PurchaseStatus.purchased) {
@@ -45,20 +46,6 @@ class _SouraPageState extends State<SouraPage> {
         });
       });
     }
-  }
-
-  Future<void> _getProducts() async {
-    Set<String> ids = Set.from([
-      '1_soura',
-      '2_soura',
-      '3_soura',
-      '4_soura',
-      '5_soura',
-    ]);
-    ProductDetailsResponse response = await _iap.queryProductDetails(ids);
-    setState(() {
-      _products = response.productDetails;
-    });
   }
 
   void buyProduct(ProductDetails prod) async {
