@@ -387,23 +387,23 @@ class _HomePageState extends State<HomePage>
                             link: Uri.parse('https://saverl.com/soura'),
                             androidParameters: AndroidParameters(
                                 packageName: 'com.saverl.baron',
-                                fallbackUrl:
-                                    Uri.parse('https://baron.saverl.com/')),
+                                fallbackUrl: Uri.parse(
+                                    'https://play.google.com/store/apps/details?id=com.saverl.baron')),
                             iosParameters: IosParameters(
                                 bundleId: 'com.saverl.baron',
-                                fallbackUrl:
-                                    Uri.parse('https://baron.saverl.com/')),
+                                fallbackUrl: Uri.parse(
+                                    'https://play.google.com/store/apps/details?id=com.saverl.baron')),
                             socialMetaTagParameters: SocialMetaTagParameters(
                               title: 'Baron',
                               description:
-                                  'Download Baron a competitive game app',
+                                  'Download Baron a live chat and video call app',
                             ),
                           );
                           final ShortDynamicLink dynamicUrl =
                               await parameters.buildShortLink();
                           final Uri shortUrl = dynamicUrl.shortUrl;
                           Share.share(
-                              'Download Baron a competitive game app. $shortUrl');
+                              'Download Baron a live chat and video call app. $shortUrl');
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
