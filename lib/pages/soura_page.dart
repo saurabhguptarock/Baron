@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/shared/shared_UI.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,7 @@ class _SouraPageState extends State<SouraPage> {
   InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
   bool _isAvailable = true;
   List<ProductDetails> _products = [];
-  List<PurchaseDetails> _purchases = [];
-  StreamSubscription _subscription;
+  StreamSubscription<List<PurchaseDetails>> _subscription;
 
   @override
   void initState() {
@@ -34,12 +34,16 @@ class _SouraPageState extends State<SouraPage> {
     _isAvailable = await _iap.isAvailable();
     if (_isAvailable) {
       await _getProducts();
-      _verifyPurchase();
-      _subscription = _iap.purchaseUpdatedStream.listen(
-        (data) => setState(() {
-          _purchases.addAll(data);
-        }),
-      );
+      _subscription = _iap.purchaseUpdatedStream.listen((data) {
+        setState(() {
+          if (data[0].status == PurchaseStatus.purchased) {
+            var ed = _products.firstWhere(
+                (prod) => prod.id == data[0].productID,
+                orElse: null);
+            print(ed);
+          }
+        });
+      });
     }
   }
 
@@ -57,27 +61,7 @@ class _SouraPageState extends State<SouraPage> {
     });
   }
 
-  // Future<void> _getPastPurchases() async {
-  //   QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
-  //   for (PurchaseDetails purchase in response.pastPurchases) {
-  //     if (Platform.isIOS) _iap.completePurchase(purchase);
-  //   }
-  //   setState(() {
-  //     _purchases = response.pastPurchases;
-  //   });
-  // }
-
-  PurchaseDetails _hasPurchased(String productId) {
-    return _purchases.firstWhere((purchase) => purchase.productID == productId,
-        orElse: () => null);
-  }
-
-  void _verifyPurchase() {
-    PurchaseDetails purchase = _hasPurchased('');
-    if (purchase != null && purchase.status == PurchaseStatus.purchased) {}
-  }
-
-  void buyProduct(ProductDetails prod) {
+  void buyProduct(ProductDetails prod) async {
     final PurchaseParam param = PurchaseParam(productDetails: prod);
     _iap.buyConsumable(purchaseParam: param, autoConsume: true);
   }
@@ -172,12 +156,14 @@ class _SouraPageState extends State<SouraPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 25,
                                         ),
                                         Text(
-                                          '${_products[0].title}',
+                                          '1,000 Soura',
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueGrey,
                                               fontFamily: 'OpenSans'),
                                         ),
                                         RaisedButton(
@@ -220,17 +206,19 @@ class _SouraPageState extends State<SouraPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 25,
                                         ),
                                         Text(
-                                          '${_products[1].title}',
+                                          '5,000 Soura',
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueGrey,
                                               fontFamily: 'OpenSans'),
                                         ),
                                         RaisedButton(
                                           onPressed: () =>
-                                              buyProduct(_products[0]),
+                                              buyProduct(_products[1]),
                                           child: Text(
                                             '${_products[1].price}',
                                             style: TextStyle(
@@ -276,17 +264,19 @@ class _SouraPageState extends State<SouraPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 25,
                                         ),
                                         Text(
-                                          '${_products[2].title}',
+                                          '10,000 Soura',
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueGrey,
                                               fontFamily: 'OpenSans'),
                                         ),
                                         RaisedButton(
                                           onPressed: () =>
-                                              buyProduct(_products[0]),
+                                              buyProduct(_products[2]),
                                           child: Text(
                                             '${_products[2].price}',
                                             style: TextStyle(
@@ -324,17 +314,19 @@ class _SouraPageState extends State<SouraPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 25,
                                         ),
                                         Text(
-                                          '${_products[3].title}',
+                                          '30,000 Soura',
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueGrey,
                                               fontFamily: 'OpenSans'),
                                         ),
                                         RaisedButton(
                                           onPressed: () =>
-                                              buyProduct(_products[0]),
+                                              buyProduct(_products[3]),
                                           child: Text(
                                             '${_products[3].price}',
                                             style: TextStyle(
@@ -380,17 +372,19 @@ class _SouraPageState extends State<SouraPage> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 30,
+                                          height: 25,
                                         ),
                                         Text(
-                                          '${_products[4].title}',
+                                          '200,000 Soura',
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueGrey,
                                               fontFamily: 'OpenSans'),
                                         ),
                                         RaisedButton(
                                           onPressed: () =>
-                                              buyProduct(_products[0]),
+                                              buyProduct(_products[4]),
                                           child: Text(
                                             '${_products[4].price}',
                                             style: TextStyle(
