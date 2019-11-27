@@ -138,12 +138,9 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
     if (user != null) {
       initDynamicLinks(user);
       return StreamProvider<User>.value(
-        initialData: User.fromMap({}),
-        value: firebaseService.streamUser(user.uid),
-        child: StreamProvider<List<PhoneDetails>>.value(
-            value: firebaseService.streamPhoneDetails(user.uid),
-            child: HomePage()),
-      );
+          initialData: User.fromMap({}),
+          value: firebaseService.streamUser(user.uid),
+          child: HomePage());
     } else
       return LoginPage();
   }

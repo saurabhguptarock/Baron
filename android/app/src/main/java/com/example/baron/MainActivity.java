@@ -21,13 +21,7 @@ public class MainActivity extends FlutterActivity {
     new MethodChannel(getFlutterView(), "com.saverl.baron/awake").setMethodCallHandler(new MethodCallHandler() {
       @Override
       public void onMethodCall(MethodCall call, Result result) {
-        if (call.method.equals("keepScreenAwake")) {
-          keepScreenAwake();
-          result.success("Done");
-        } else if (call.method.equals("keepScreenNormal")) {
-          keepScreenNormal();
-          result.success("Done");
-        } else if (call.method.equals("showToast")) {
+        if (call.method.equals("showToast")) {
           Toast.makeText(getApplicationContext() ,call.argument("text") ,Toast.LENGTH_SHORT).show();
           result.success("Done");
         } else {
@@ -35,13 +29,5 @@ public class MainActivity extends FlutterActivity {
         }
       }
     });
-  }
-
-  private void keepScreenAwake() {
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-  }
-
-  private void keepScreenNormal() {
-    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
   }
 }
