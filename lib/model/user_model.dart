@@ -56,33 +56,3 @@ class Collectible {
     );
   }
 }
-
-class PhoneDetails {
-  final String img;
-  final String name;
-  final String time;
-  final bool wasIncoming;
-  final bool wasmissed;
-
-  PhoneDetails(
-      {this.img, this.name, this.time, this.wasIncoming, this.wasmissed});
-  factory PhoneDetails.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
-    return PhoneDetails(
-      img: data['img'] ?? '',
-      name: data['name'] ?? '',
-      time: data['time'] ?? '',
-      wasIncoming: data['wasIncoming'] ?? false,
-      wasmissed: data['wasmissed'] ?? false,
-    );
-  }
-}
-
-class Message {
-  final User sender;
-  final String time;
-  final String text;
-  final bool isUnread;
-
-  Message({this.text, this.isUnread, this.sender, this.time});
-}

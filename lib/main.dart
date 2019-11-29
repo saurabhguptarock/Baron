@@ -9,6 +9,7 @@ import 'package:Baron/users/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -47,8 +48,35 @@ class QuickActionsManager extends StatefulWidget {
   _QuickActionsManagerState createState() => _QuickActionsManagerState();
 }
 
+List<ProductDetails> appProducts = [];
+
 class _QuickActionsManagerState extends State<QuickActionsManager> {
   FirebaseUser users;
+  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  bool _isAvailable = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  void _initialize() async {
+    _isAvailable = await _iap.isAvailable();
+    if (_isAvailable) {
+      Set<String> ids = Set.from([
+        '1_soura',
+        '2_soura',
+        '3_soura',
+        '4_soura',
+        '5_soura',
+      ]);
+      ProductDetailsResponse response = await _iap.queryProductDetails(ids);
+      setState(() {
+        appProducts = response.productDetails;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +138,9 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
     if (user != null) {
       initDynamicLinks(user);
       return StreamProvider<User>.value(
-        initialData: User.fromMap({}),
-        value: firebaseService.streamUser(user.uid),
-        child: StreamProvider<List<PhoneDetails>>.value(
-            value: firebaseService.streamPhoneDetails(user.uid),
-            child: HomePage()),
-      );
+          initialData: User.fromMap({}),
+          value: firebaseService.streamUser(user.uid),
+          child: HomePage());
     } else
       return LoginPage();
   }

@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:Baron/model/user_model.dart';
-import 'package:Baron/pages/chat_page.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/notification_page.dart';
-import 'package:Baron/pages/phone_call_page.dart';
 import 'package:Baron/pages/searchuserprofile_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
@@ -24,7 +22,6 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-int currentIndex = 0;
 final List<DocumentSnapshot> userList = [];
 
 class _HomePageState extends State<HomePage>
@@ -75,6 +72,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+<<<<<<< HEAD
 
   void onTabTapped(int index) {
     setState(() {
@@ -82,38 +80,14 @@ class _HomePageState extends State<HomePage>
     });
   }
 
+=======
+>>>>>>> ea7f780f17a35854ddeaf06a636ed85b3936e2fa
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
     final userDetails = Provider.of<User>(context);
-    final phoneDetails = Provider.of<List<PhoneDetails>>(context);
     saveDeviceToken(user.uid);
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (i) => onTabTapped(i),
-        backgroundColor: Color.fromRGBO(23, 31, 42, 1),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesomeIcons.solidCommentAlt,
-              color: Colors.white,
-              size: currentIndex == 0 ? 27 : 18,
-            ),
-            title: SizedBox.shrink(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.phoneAlt,
-                color: Colors.white, size: currentIndex == 1 ? 27 : 18),
-            title: SizedBox.shrink(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.video,
-                color: Colors.white, size: currentIndex == 2 ? 27 : 18),
-            title: SizedBox.shrink(),
-          ),
-        ],
-      ),
       key: _scaffoldKey,
       drawer: Drawer(
         child: Container(
@@ -380,23 +354,23 @@ class _HomePageState extends State<HomePage>
                             link: Uri.parse('https://saverl.com/soura'),
                             androidParameters: AndroidParameters(
                                 packageName: 'com.saverl.baron',
-                                fallbackUrl:
-                                    Uri.parse('https://baron.saverl.com/')),
+                                fallbackUrl: Uri.parse(
+                                    'https://play.google.com/store/apps/details?id=com.saverl.baron')),
                             iosParameters: IosParameters(
                                 bundleId: 'com.saverl.baron',
-                                fallbackUrl:
-                                    Uri.parse('https://baron.saverl.com/')),
+                                fallbackUrl: Uri.parse(
+                                    'https://play.google.com/store/apps/details?id=com.saverl.baron')),
                             socialMetaTagParameters: SocialMetaTagParameters(
                               title: 'Baron',
                               description:
-                                  'Download Baron a competitive game app',
+                                  'Download Baron a live chat and video call app',
                             ),
                           );
                           final ShortDynamicLink dynamicUrl =
                               await parameters.buildShortLink();
                           final Uri shortUrl = dynamicUrl.shortUrl;
                           Share.share(
-                              'Download Baron a competitive game app. $shortUrl');
+                              'Download Baron a live chat and video call app. $shortUrl');
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -474,41 +448,9 @@ class _HomePageState extends State<HomePage>
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     color: Color.fromRGBO(27, 36, 48, 1),
-                    child: currentIndex == 0
-                        ? Text(
-                            'Chat',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        : currentIndex == 1
-                            ? phoneDetails != null
-                                ? phoneDetails.length > 0
-                                    ? ListView.builder(
-                                        itemCount: phoneDetails.length,
-                                        itemBuilder: (ctx, i) =>
-                                            phoneDetailsCard(phoneDetails[i]),
-                                      )
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          RaisedButton(
-                                            onPressed: () {},
-                                          ),
-                                          Text('data'),
-                                        ],
-                                      )
-                                : ListView.builder(
-                                    itemCount: 1,
-                                    itemBuilder: (ctx, i) => phoneDetailsCard(
-                                        PhoneDetails(
-                                            img: '${userDetails.photoUrl}',
-                                            name: '${userDetails.name}',
-                                            time: '00:00',
-                                            wasIncoming: false)))
-                            : Text(
-                                'Video',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                    child: Center(
+                      child: Text('data'),
+                    ),
                   ),
                 ],
               ),
@@ -630,58 +572,6 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-Widget phoneDetailsCard(PhoneDetails phoneDetails) {
-  return Container(
-    child: ListTile(
-      trailing: IconButton(
-        onPressed: () {},
-        icon: Icon(
-          FontAwesomeIcons.sms,
-          color: Colors.white,
-        ),
-      ),
-      onLongPress: () {},
-      onTap: () {},
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(phoneDetails.img),
-        radius: 25,
-      ),
-      title: Text(
-        '${phoneDetails.name}',
-        style: TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 18,
-            color: Colors.white,
-            fontWeight: FontWeight.bold),
-      ),
-      subtitle: Row(
-        children: <Widget>[
-          Transform.rotate(
-            angle: -math.pi / 4,
-            child: Icon(
-              phoneDetails.wasIncoming == false
-                  ? Icons.arrow_forward
-                  : Icons.arrow_back,
-              color: Colors.green,
-              size: 18,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 5),
-          ),
-          Text(
-            '${phoneDetails.time}',
-            style: TextStyle(
-              fontFamily: 'OpenSans',
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class DataSearch extends SearchDelegate<String> {
   final User currentUser;
 
@@ -725,33 +615,10 @@ class DataSearch extends SearchDelegate<String> {
       itemCount: users.length,
       itemBuilder: (ctx, idx) => ListTile(
         onTap: () {
-          print(currentIndex);
           close(context, null);
-          if (currentIndex == 0) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ChatPage(
-                  userOnChat: users[idx].data,
-                ),
-              ),
-            );
-          } else if (currentIndex == 1) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => PhoneCallPage(
-                  userOnPhone: users[idx].data,
-                ),
-              ),
-            );
-          } else {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ChatPage(
-                  userOnChat: users[idx].data,
-                ),
-              ),
-            );
-          }
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (ctx) => NotificationsPage()),
+          );
         },
         leading: CircleAvatar(
           backgroundImage: NetworkImage("${users[idx].data['photoUrl']}"),
