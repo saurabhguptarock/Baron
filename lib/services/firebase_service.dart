@@ -49,17 +49,6 @@ Stream<User> streamUser(String uid) {
       .map((snap) => User.fromMap(snap.data));
 }
 
-Stream<List<PhoneDetails>> streamPhoneDetails(String uid) {
-  return _firestore
-      .collection('users')
-      .document(uid)
-      .collection('phoneDetails')
-      .snapshots()
-      .map((list) => list.documents
-          .map((data) => PhoneDetails.fromFirestore(data))
-          .toList());
-}
-
 Stream<List<Collectible>> streamCollectible() {
   return _firestore
       .collection('collectibles')
