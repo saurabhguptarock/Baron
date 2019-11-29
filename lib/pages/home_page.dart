@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage>
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _messaging = FirebaseMessaging();
   final Firestore _firestore = Firestore.instance;
-  
+
   @override
   void initState() {
     super.initState();
@@ -72,16 +72,6 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-<<<<<<< HEAD
-
-  void onTabTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
-=======
->>>>>>> ea7f780f17a35854ddeaf06a636ed85b3936e2fa
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
