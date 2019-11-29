@@ -74,16 +74,16 @@ void signOut() {
   _auth.signOut();
 }
 
-void updateFollowers(String uid) {
+void deleteTile(String uid, String docId) {
   _firestore
       .collection('users')
       .document(uid)
-      .updateData({'followers': FieldValue.increment(1)});
-}
-
-void updateFollowing(String uid) {
-  _firestore
-      .collection('users')
-      .document(uid)
-      .updateData({'following': FieldValue.increment(1)});
+      .collection('phoneDetails')
+      .where('docId', isEqualTo: docId)
+      .getDocuments()
+      .then((v) {
+    v.documents.forEach((f) {
+      f.reference.delete();
+    });
+  });
 }

@@ -176,10 +176,6 @@ class _CallPageState extends State<CallPage> {
   /// Video layout wrapper
   Widget _viewRows() {
     List<Widget> views = _getRenderViews();
-    if (views.length == 1)
-      playCallSound();
-    else
-      endCallSound();
     switch (views.length) {
       case 1:
         return Container(
@@ -277,7 +273,6 @@ class _CallPageState extends State<CallPage> {
   }
 
   void _onCallEnd(BuildContext context) {
-    endCallSound();
     Navigator.pop(context);
   }
 

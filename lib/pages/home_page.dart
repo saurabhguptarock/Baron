@@ -1,14 +1,13 @@
 import 'dart:io';
 import 'package:Baron/model/user_model.dart';
-import 'package:Baron/pages/chat_page.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/notification_page.dart';
 import 'package:Baron/pages/phone_call_page.dart';
-import 'package:Baron/pages/searchuserprofile_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -24,7 +23,6 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-int currentIndex = 0;
 final List<DocumentSnapshot> userList = [];
 
 class _HomePageState extends State<HomePage>
@@ -75,12 +73,6 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  void onTabTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
@@ -88,31 +80,6 @@ class _HomePageState extends State<HomePage>
     final phoneDetails = Provider.of<List<PhoneDetails>>(context);
     saveDeviceToken(user.uid);
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (i) => onTabTapped(i),
-        backgroundColor: Color.fromRGBO(23, 31, 42, 1),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesomeIcons.solidCommentAlt,
-              color: Colors.white,
-              size: currentIndex == 0 ? 27 : 18,
-            ),
-            title: SizedBox.shrink(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.phoneAlt,
-                color: Colors.white, size: currentIndex == 1 ? 27 : 18),
-            title: SizedBox.shrink(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.video,
-                color: Colors.white, size: currentIndex == 2 ? 27 : 18),
-            title: SizedBox.shrink(),
-          ),
-        ],
-      ),
       key: _scaffoldKey,
       drawer: Drawer(
         child: Container(
@@ -132,9 +99,22 @@ class _HomePageState extends State<HomePage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(user.photoUrl),
-                          radius: 35,
+                        CachedNetworkImage(
+                          imageUrl: userDetails.photoUrl,
+                          imageBuilder: (context, imageProvider) =>
+                              CircleAvatar(
+                            backgroundImage: imageProvider,
+                            radius: 35,
+                          ),
+                          placeholder: (context, url) => Shimmer.fromColors(
+                            baseColor: Colors.grey,
+                            highlightColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 35,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
                         Row(
                           children: <Widget>[
@@ -466,48 +446,78 @@ class _HomePageState extends State<HomePage>
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 85),
-                  ),
+                  phoneDetails != null
+                      ? phoneDetails.length > 0
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 85),
+                            )
+                          : SizedBox.shrink()
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 85),
+                        ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     color: Color.fromRGBO(27, 36, 48, 1),
-                    child: currentIndex == 0
-                        ? Text(
-                            'Chat',
-                            style: TextStyle(color: Colors.white),
-                          )
-                        : currentIndex == 1
-                            ? phoneDetails != null
-                                ? phoneDetails.length > 0
-                                    ? ListView.builder(
-                                        itemCount: phoneDetails.length,
-                                        itemBuilder: (ctx, i) =>
-                                            phoneDetailsCard(phoneDetails[i]),
-                                      )
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          RaisedButton(
-                                            onPressed: () {},
-                                          ),
-                                          Text('data'),
-                                        ],
-                                      )
-                                : ListView.builder(
-                                    itemCount: 1,
-                                    itemBuilder: (ctx, i) => phoneDetailsCard(
-                                        PhoneDetails(
-                                            img: '${userDetails.photoUrl}',
-                                            name: '${userDetails.name}',
-                                            time: '00:00',
-                                            wasIncoming: false)))
-                            : Text(
-                                'Video',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                    child: phoneDetails != null
+                        ? phoneDetails.length > 0
+                            ? ListView.builder(
+                                itemCount: phoneDetails.length,
+                                itemBuilder: (ctx, i) => phoneDetailsCard(
+                                    phoneDetails[i], userDetails.uid, true),
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                        Color.fromRGBO(27, 36, 48, 1),
+                                        BlendMode.multiply),
+                                    child: Image(
+                                      image: AssetImage(
+                                          'assets/images/not-found.webp'),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () => showSearch(
+                                        context: context,
+                                        delegate: DataSearch(userDetails)),
+                                    child: Container(
+                                      width: 150,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          color: Color.fromRGBO(23, 31, 42, 1),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Center(
+                                        child: Text(
+                                          'Start new Call',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: 'OpenSans',
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                        : ListView.builder(
+                            itemCount: 1,
+                            itemBuilder: (ctx, i) => Shimmer.fromColors(
+                              baseColor: Colors.grey,
+                              highlightColor: Colors.white,
+                              child: phoneDetailsCard(
+                                  PhoneDetails(
+                                      img: '${userDetails.photoUrl}',
+                                      name: '${userDetails.name}',
+                                      time: '00:00',
+                                      wasIncoming: false),
+                                  userDetails.uid,
+                                  false),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -629,21 +639,36 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-Widget phoneDetailsCard(PhoneDetails phoneDetails) {
+Widget phoneDetailsCard(
+    PhoneDetails phoneDetails, String uid, bool isDeletable) {
+  callUser(int i) {}
   return Container(
     child: ListTile(
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () => isDeletable
+            ? firebaseService.deleteTile(uid, phoneDetails.docId)
+            : null,
         icon: Icon(
-          FontAwesomeIcons.sms,
-          color: Colors.white,
+          Icons.delete_forever,
+          color: Colors.red,
+          size: 30,
         ),
       ),
-      onLongPress: () {},
-      onTap: () {},
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(phoneDetails.img),
-        radius: 25,
+      onTap: () => callUser(0),
+      leading: CachedNetworkImage(
+        imageUrl: phoneDetails.img,
+        imageBuilder: (context, imageProvider) => CircleAvatar(
+          backgroundImage: imageProvider,
+          radius: 25,
+        ),
+        placeholder: (context, url) => Shimmer.fromColors(
+          baseColor: Colors.grey,
+          highlightColor: Colors.white,
+          child: CircleAvatar(
+            radius: 25,
+          ),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
       title: Text(
         '${phoneDetails.name}',
@@ -687,6 +712,21 @@ class DataSearch extends SearchDelegate<String> {
   DataSearch(this.currentUser);
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return theme.copyWith(
+        inputDecorationTheme: InputDecorationTheme(
+            hintStyle: TextStyle(color: theme.primaryTextTheme.title.color)),
+        primaryColor: theme.primaryColor,
+        primaryIconTheme: theme.primaryIconTheme,
+        primaryColorBrightness: theme.primaryColorBrightness,
+        primaryTextTheme: theme.primaryTextTheme,
+        textTheme: theme.textTheme.copyWith(
+            title: theme.textTheme.title
+                .copyWith(color: theme.primaryTextTheme.title.color)));
+  }
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -724,36 +764,25 @@ class DataSearch extends SearchDelegate<String> {
       itemCount: users.length,
       itemBuilder: (ctx, idx) => ListTile(
         onTap: () {
-          print(currentIndex);
-          close(context, null);
-          if (currentIndex == 0) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ChatPage(
-                  userOnChat: users[idx].data,
-                ),
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => PhoneCallPage(
+                userOnPhone: users[idx].data,
               ),
-            );
-          } else if (currentIndex == 1) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => PhoneCallPage(
-                  userOnPhone: users[idx].data,
-                ),
-              ),
-            );
-          } else {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ChatPage(
-                  userOnChat: users[idx].data,
-                ),
-              ),
-            );
-          }
+            ),
+          );
         },
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage("${users[idx].data['photoUrl']}"),
+        leading: CachedNetworkImage(
+          imageUrl: users[idx].data['photoUrl'],
+          imageBuilder: (context, imageProvider) => CircleAvatar(
+            backgroundImage: imageProvider,
+          ),
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey,
+            highlightColor: Colors.white,
+            child: CircleAvatar(),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         title: RichText(
           text: TextSpan(

@@ -1,5 +1,6 @@
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/shared/shared_UI.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,30 +43,6 @@ class _CollectiblesPageState extends State<CollectiblesPage> {
 
   Widget collectibleCard(Collectible collectible) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) => Scaffold(
-            appBar: AppBar(),
-            body: Column(
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  width: 100,
-                  child: Hero(
-                    tag: collectible.name,
-                    child: Image(
-                      image: NetworkImage(collectible.img),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(collectible.name),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Card(
@@ -82,17 +59,26 @@ class _CollectiblesPageState extends State<CollectiblesPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: CircleAvatar(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: CachedNetworkImage(
+                    imageUrl: collectible.img,
+                    imageBuilder: (context, imageProvider) => CircleAvatar(
                       backgroundColor: Color.fromRGBO(27, 36, 48, 1),
                       radius: 45,
-                      child: Hero(
-                        tag: collectible.name,
-                        child: Image(
-                          image: NetworkImage(collectible.img),
-                        ),
+                      child: Image(
+                        image: imageProvider,
                       ),
-                    )),
+                    ),
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey,
+                      highlightColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 45,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: Column(

@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Baron',
-        theme: ThemeData(primaryColor: Colors.white),
+        theme: ThemeData(primaryColor: Color.fromRGBO(23, 31, 42, 1)),
         home: QuickActionsManager(),
         routes: <String, WidgetBuilder>{
           "/login": (BuildContext context) => LoginPage(),
