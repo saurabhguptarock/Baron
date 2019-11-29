@@ -18,7 +18,6 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'dart:math' as math;
-// import 'package:flutter_tts/flutter_tts.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -76,12 +75,6 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  // Future speak() async {
-  //   await flutterTts.speak("    maai pagal hu mujhe ghar jana hai");
-  //   await flutterTts.setLanguage("hi-IN");
-  //   await flutterTts.setVoice('hi-in-x-hid-network');
-  //   await flutterTts.setSpeechRate(0.8);
-  // }
 
   void onTabTapped(int index) {
     setState(() {
