@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage>
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _messaging = FirebaseMessaging();
   final Firestore _firestore = Firestore.instance;
-  // FlutterTts flutterTts = FlutterTts();
+  
   @override
   void initState() {
     super.initState();
