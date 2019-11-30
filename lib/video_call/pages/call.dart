@@ -220,7 +220,38 @@ class _CallPageState extends State<CallPage> {
         );
       default:
     }
-    return Container();
+    showToast('Maximum Person Reached');
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Error',
+          style: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Container(
+        color: Color.fromRGBO(23, 31, 42, 1),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Text(
+              'Maximum number of connected people reached',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   /// Toolbar layout
@@ -273,15 +304,16 @@ class _CallPageState extends State<CallPage> {
   }
 
   void _onCallEnd(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   void _onToggleMute() {
     setState(() {
       muted = !muted;
     });
-    muted ? showToast('Muted') : showToast('Un Muted');
     AgoraRtcEngine.muteLocalAudioStream(muted);
+    muted ? showToast('Muted') : showToast('UnMuted');
   }
 
   void _onSwitchCamera() {
@@ -290,11 +322,12 @@ class _CallPageState extends State<CallPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> views = _getRenderViews();
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
         child: Stack(
-          children: <Widget>[_viewRows(), _toolbar()],
+          children: <Widget>[_viewRows(), if (views.length < 4) _toolbar()],
         ),
       ),
     );

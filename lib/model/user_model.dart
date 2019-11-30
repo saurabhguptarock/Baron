@@ -63,15 +63,8 @@ class PhoneDetails {
   final String time;
   final String docId;
   final bool wasIncoming;
-  final bool wasMissed;
 
-  PhoneDetails(
-      {this.img,
-      this.name,
-      this.time,
-      this.wasIncoming,
-      this.wasMissed,
-      this.docId});
+  PhoneDetails({this.img, this.name, this.time, this.wasIncoming, this.docId});
   factory PhoneDetails.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
     return PhoneDetails(
@@ -79,7 +72,6 @@ class PhoneDetails {
         name: data['name'] ?? '',
         time: data['time'] ?? '',
         wasIncoming: data['wasIncoming'] ?? false,
-        wasMissed: data['wasMissed'] ?? false,
         docId: data['docId'] ?? '');
   }
 }

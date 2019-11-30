@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:Baron/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
@@ -54,6 +57,7 @@ Stream<List<PhoneDetails>> streamPhoneDetails(String uid) {
       .collection('users')
       .document(uid)
       .collection('phoneDetails')
+      .orderBy('time', descending: true)
       .snapshots()
       .map((list) => list.documents
           .map((data) => PhoneDetails.fromFirestore(data))
@@ -86,4 +90,29 @@ void deleteTile(String uid, String docId) {
       f.reference.delete();
     });
   });
+}
+
+void callUserBackend(User currentUser, Map<String, dynamic> userToCall) {
+  _firestore
+      .collection('users')
+      .document(userToCall['uid'])
+      .collection('phoneDetails')
+      .add({
+    'img': currentUser.photoUrl,
+    'name': currentUser.name,
+    'time': '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}',
+    'docId': '',
+    'wasIncoming': true,
+  }).then((data) => data.updateData({'docId': data.documentID}));
+  _firestore
+      .collection('users')
+      .document(currentUser.uid)
+      .collection('phoneDetails')
+      .add({
+    'img': userToCall['photoUrl'],
+    'name': userToCall['name'],
+    'time': '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}',
+    'docId': '',
+    'wasIncoming': false,
+  }).then((data) => data.updateData({'docId': data.documentID}));
 }

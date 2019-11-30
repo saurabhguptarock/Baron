@@ -2,17 +2,19 @@ import 'dart:io';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/notification_page.dart';
-import 'package:Baron/pages/phone_call_page.dart';
 import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
+import 'package:Baron/uuid_gen/uuid.dart';
+import 'package:Baron/video_call/pages/call.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -464,7 +466,11 @@ class _HomePageState extends State<HomePage>
                             ? ListView.builder(
                                 itemCount: phoneDetails.length,
                                 itemBuilder: (ctx, i) => phoneDetailsCard(
-                                    phoneDetails[i], userDetails.uid, true),
+                                  phoneDetails[i],
+                                  userDetails.uid,
+                                  true,
+                                  userDetails,
+                                ),
                               )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -503,19 +509,15 @@ class _HomePageState extends State<HomePage>
                                   ),
                                 ],
                               )
-                        : ListView.builder(
-                            itemCount: 1,
-                            itemBuilder: (ctx, i) => Shimmer.fromColors(
-                              baseColor: Colors.grey,
-                              highlightColor: Colors.white,
-                              child: phoneDetailsCard(
-                                  PhoneDetails(
-                                      img: '${userDetails.photoUrl}',
-                                      name: '${userDetails.name}',
-                                      time: '00:00',
-                                      wasIncoming: false),
-                                  userDetails.uid,
-                                  false),
+                        : Center(
+                            child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                  Color.fromRGBO(27, 36, 48, 1),
+                                  BlendMode.multiply),
+                              child: Image(
+                                image:
+                                    AssetImage('assets/images/not-found.webp'),
+                              ),
                             ),
                           ),
                   ),
@@ -640,8 +642,7 @@ class _HomePageState extends State<HomePage>
 }
 
 Widget phoneDetailsCard(
-    PhoneDetails phoneDetails, String uid, bool isDeletable) {
-  callUser(int i) {}
+    PhoneDetails phoneDetails, String uid, bool isDeletable, User currentUser) {
   return Container(
     child: ListTile(
       trailing: IconButton(
@@ -654,10 +655,10 @@ Widget phoneDetailsCard(
           size: 30,
         ),
       ),
-      onTap: () => callUser(0),
       leading: CachedNetworkImage(
         imageUrl: phoneDetails.img,
         imageBuilder: (context, imageProvider) => CircleAvatar(
+          backgroundColor: Color.fromRGBO(27, 36, 48, 1),
           backgroundImage: imageProvider,
           radius: 25,
         ),
@@ -752,25 +753,56 @@ class DataSearch extends SearchDelegate<String> {
     return null;
   }
 
+  Future<bool> _handleCameraAndMic() async {
+    await PermissionHandler().requestPermissions([
+      PermissionGroup.camera,
+      PermissionGroup.microphone,
+      PermissionGroup.location
+    ]);
+    PermissionStatus permissionStatus1 =
+        await PermissionHandler().checkPermissionStatus(
+      PermissionGroup.camera,
+    );
+    PermissionStatus permissionStatus2 =
+        await PermissionHandler().checkPermissionStatus(
+      PermissionGroup.microphone,
+    );
+    if (permissionStatus1.value == 2 && permissionStatus2.value == 2)
+      return Future.value(true);
+    else
+      return Future.value(false);
+  }
+
   @override
   Widget buildSuggestions(BuildContext context) {
+    List<DocumentSnapshot> newuserList = userList;
+    newuserList.removeWhere((d) => d.data['uid'] == currentUser.uid);
     final List<DocumentSnapshot> users = query.isEmpty
-        ? userList
-        : userList
+        ? newuserList
+        : newuserList
             .where((p) =>
                 p.data['name'].toLowerCase().startsWith(query.toLowerCase()))
             .toList();
     return ListView.builder(
       itemCount: users.length,
       itemBuilder: (ctx, idx) => ListTile(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => PhoneCallPage(
-                userOnPhone: users[idx].data,
+        onTap: () async {
+          bool isGranted = await _handleCameraAndMic();
+          if (isGranted) {
+            firebaseService.callUserBackend(currentUser, users[idx].data);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => WillPopScope(
+                  onWillPop: () => Future.value(false),
+                  child: CallPage(
+                    channelName: users[idx].data['uid'],
+                  ),
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            showToast('Please Grant Permission');
+          }
         },
         leading: CachedNetworkImage(
           imageUrl: users[idx].data['photoUrl'],
