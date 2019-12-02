@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/main.dart';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/shared/shared_UI.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
+import './home_page.dart';
 
 class SouraPage extends StatefulWidget {
   @override
@@ -18,11 +19,10 @@ class _SouraPageState extends State<SouraPage> {
   bool _isAvailable = true;
   List<ProductDetails> _products = [];
   StreamSubscription<List<PurchaseDetails>> _subscription;
-
   @override
   void initState() {
     super.initState();
-    _initialize();
+    _initialize(souraBuyUser);
   }
 
   @override
@@ -31,7 +31,7 @@ class _SouraPageState extends State<SouraPage> {
     _subscription.cancel();
   }
 
-  void _initialize() async {
+  void _initialize(User user) async {
     _isAvailable = await _iap.isAvailable();
     if (_isAvailable) {
       _products = appProducts;
@@ -41,7 +41,21 @@ class _SouraPageState extends State<SouraPage> {
             var ed = _products.firstWhere(
                 (prod) => prod.id == data[0].productID,
                 orElse: null);
-            print(ed);
+            int localSoura;
+            if (ed.id == '1_soura') {
+              localSoura = 1000;
+            } else if (ed.id == '2_soura') {
+              localSoura = 5000;
+            } else if (ed.id == '3_soura') {
+              localSoura = 10000;
+            } else if (ed.id == '4_soura') {
+              localSoura = 30000;
+            } else if (ed.id == '5_soura') {
+              localSoura = 200000;
+            } else {
+              print(ed.id);
+            }
+            firebaseService.updateCoins(user.uid, localSoura);
           }
         });
       });

@@ -173,7 +173,6 @@ class _CallPageState extends State<CallPage> {
     );
   }
 
-  /// Video layout wrapper
   Widget _viewRows() {
     List<Widget> views = _getRenderViews();
     switch (views.length) {
@@ -305,7 +304,6 @@ class _CallPageState extends State<CallPage> {
 
   void _onCallEnd(BuildContext context) {
     Navigator.of(context).pop();
-    Navigator.of(context).pop();
   }
 
   void _onToggleMute() {
@@ -327,7 +325,7 @@ class _CallPageState extends State<CallPage> {
       backgroundColor: Colors.black,
       body: Center(
         child: Stack(
-          children: <Widget>[_viewRows(), if (views.length < 4) _toolbar()],
+          children: <Widget>[_viewRows(), if (views.length <= 4) _toolbar()],
         ),
       ),
     );

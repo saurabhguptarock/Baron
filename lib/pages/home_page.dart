@@ -6,7 +6,6 @@ import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
-import 'package:Baron/uuid_gen/uuid.dart';
 import 'package:Baron/video_call/pages/call.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +25,7 @@ class HomePage extends StatefulWidget {
 }
 
 final List<DocumentSnapshot> userList = [];
+User souraBuyUser;
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
@@ -81,6 +81,9 @@ class _HomePageState extends State<HomePage>
     final userDetails = Provider.of<User>(context);
     final phoneDetails = Provider.of<List<PhoneDetails>>(context);
     saveDeviceToken(user.uid);
+    setState(() {
+      souraBuyUser = userDetails;
+    });
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
@@ -466,11 +469,11 @@ class _HomePageState extends State<HomePage>
                             ? ListView.builder(
                                 itemCount: phoneDetails.length,
                                 itemBuilder: (ctx, i) => phoneDetailsCard(
-                                  phoneDetails[i],
-                                  userDetails.uid,
-                                  true,
-                                  userDetails,
-                                ),
+                                    phoneDetails[i],
+                                    userDetails.uid,
+                                    true,
+                                    userDetails,
+                                    context),
                               )
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -641,10 +644,70 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-Widget phoneDetailsCard(
-    PhoneDetails phoneDetails, String uid, bool isDeletable, User currentUser) {
+Future<bool> _handleCameraAndMic() async {
+  await PermissionHandler().requestPermissions([
+    PermissionGroup.camera,
+    PermissionGroup.microphone,
+    PermissionGroup.location
+  ]);
+  PermissionStatus permissionStatus1 =
+      await PermissionHandler().checkPermissionStatus(
+    PermissionGroup.camera,
+  );
+  PermissionStatus permissionStatus2 =
+      await PermissionHandler().checkPermissionStatus(
+    PermissionGroup.microphone,
+  );
+  if (permissionStatus1.value == 2 && permissionStatus2.value == 2)
+    return Future.value(true);
+  else
+    return Future.value(false);
+}
+
+Widget phoneDetailsCard(PhoneDetails phoneDetails, String uid, bool isDeletable,
+    User currentUser, BuildContext context) {
   return Container(
     child: ListTile(
+      onTap: () async {
+        bool isGranted = await _handleCameraAndMic();
+        if (isGranted) {
+          if (phoneDetails.calledByUid == currentUser.uid) {
+            if (phoneDetails.wasIncoming)
+              firebaseService
+                  .callUserBackend(currentUser, phoneDetails.channelName, {
+                'photoUrl': phoneDetails.img,
+                'uid': phoneDetails.channelName,
+                'name': phoneDetails.name,
+              });
+            else
+              firebaseService
+                  .callUserBackend(currentUser, phoneDetails.channelName, {
+                'photoUrl': phoneDetails.img,
+                'uid': phoneDetails.calledToUid,
+                'name': phoneDetails.name,
+              });
+          } else {
+            firebaseService
+                .callUserBackend(currentUser, phoneDetails.channelName, {
+              'photoUrl': phoneDetails.img,
+              'uid': phoneDetails.calledByUid,
+              'name': phoneDetails.name,
+            });
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => WillPopScope(
+                onWillPop: () => Future.value(false),
+                child: CallPage(
+                  channelName: phoneDetails.channelName,
+                ),
+              ),
+            ),
+          );
+        } else {
+          showToast('Please Grant Permission');
+        }
+      },
       trailing: IconButton(
         onPressed: () => isDeletable
             ? firebaseService.deleteTile(uid, phoneDetails.docId)
@@ -753,26 +816,6 @@ class DataSearch extends SearchDelegate<String> {
     return null;
   }
 
-  Future<bool> _handleCameraAndMic() async {
-    await PermissionHandler().requestPermissions([
-      PermissionGroup.camera,
-      PermissionGroup.microphone,
-      PermissionGroup.location
-    ]);
-    PermissionStatus permissionStatus1 =
-        await PermissionHandler().checkPermissionStatus(
-      PermissionGroup.camera,
-    );
-    PermissionStatus permissionStatus2 =
-        await PermissionHandler().checkPermissionStatus(
-      PermissionGroup.microphone,
-    );
-    if (permissionStatus1.value == 2 && permissionStatus2.value == 2)
-      return Future.value(true);
-    else
-      return Future.value(false);
-  }
-
   @override
   Widget buildSuggestions(BuildContext context) {
     List<DocumentSnapshot> newuserList = userList;
@@ -789,7 +832,9 @@ class DataSearch extends SearchDelegate<String> {
         onTap: () async {
           bool isGranted = await _handleCameraAndMic();
           if (isGranted) {
-            firebaseService.callUserBackend(currentUser, users[idx].data);
+            firebaseService.callUserBackend(
+                currentUser, users[idx].data['uid'], users[idx].data);
+            Navigator.of(context).pop();
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => WillPopScope(

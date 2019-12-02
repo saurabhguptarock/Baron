@@ -57,6 +57,7 @@ Stream<List<PhoneDetails>> streamPhoneDetails(String uid) {
       .collection('users')
       .document(uid)
       .collection('phoneDetails')
+      // .where('calledByUid', isEqualTo: uid)
       .orderBy('time', descending: true)
       .snapshots()
       .map((list) => list.documents
@@ -78,6 +79,8 @@ void signOut() {
   _auth.signOut();
 }
 
+// void sendNotification(String currentUser){}
+
 void deleteTile(String uid, String docId) {
   _firestore
       .collection('users')
@@ -92,18 +95,15 @@ void deleteTile(String uid, String docId) {
   });
 }
 
-void callUserBackend(User currentUser, Map<String, dynamic> userToCall) {
+void updateCoins(String uid, int noOfCoins) {
   _firestore
       .collection('users')
-      .document(userToCall['uid'])
-      .collection('phoneDetails')
-      .add({
-    'img': currentUser.photoUrl,
-    'name': currentUser.name,
-    'time': '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}',
-    'docId': '',
-    'wasIncoming': true,
-  }).then((data) => data.updateData({'docId': data.documentID}));
+      .document(uid)
+      .updateData({'soura': FieldValue.increment(noOfCoins)});
+}
+
+void callUserBackend(User currentUser, String channelName,
+    [Map<String, dynamic> userToCall]) {
   _firestore
       .collection('users')
       .document(currentUser.uid)
@@ -114,5 +114,23 @@ void callUserBackend(User currentUser, Map<String, dynamic> userToCall) {
     'time': '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}',
     'docId': '',
     'wasIncoming': false,
+    'channelName': channelName,
+    'calledByUid': currentUser.uid,
+    'calledToUid': userToCall['uid']
+  }).then((data) => data.updateData({'docId': data.documentID}));
+
+  _firestore
+      .collection('users')
+      .document(userToCall['uid'])
+      .collection('phoneDetails')
+      .add({
+    'img': currentUser.photoUrl,
+    'name': currentUser.name,
+    'time': '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}',
+    'docId': '',
+    'wasIncoming': true,
+    'channelName': channelName,
+    'calledByUid': currentUser.uid,
+    'calledToUid': userToCall['uid']
   }).then((data) => data.updateData({'docId': data.documentID}));
 }

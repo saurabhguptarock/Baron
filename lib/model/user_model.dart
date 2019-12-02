@@ -62,16 +62,31 @@ class PhoneDetails {
   final String name;
   final String time;
   final String docId;
+  final String channelName;
+  final String calledByUid;
+  final String calledToUid;
   final bool wasIncoming;
 
-  PhoneDetails({this.img, this.name, this.time, this.wasIncoming, this.docId});
+  PhoneDetails(
+      {this.img,
+      this.name,
+      this.time,
+      this.wasIncoming,
+      this.docId,
+      this.channelName,
+      this.calledByUid,
+      this.calledToUid});
   factory PhoneDetails.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
     return PhoneDetails(
-        img: data['img'] ?? '',
-        name: data['name'] ?? '',
-        time: data['time'] ?? '',
-        wasIncoming: data['wasIncoming'] ?? false,
-        docId: data['docId'] ?? '');
+      img: data['img'] ?? '',
+      name: data['name'] ?? '',
+      time: data['time'] ?? '',
+      wasIncoming: data['wasIncoming'] ?? false,
+      docId: data['docId'] ?? '',
+      channelName: data['channelName'] ?? '',
+      calledByUid: data['calledByUid'] ?? '',
+      calledToUid: data['calledToUid'] ?? '',
+    );
   }
 }
