@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:Baron/model/user_model.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/notification_page.dart';
-import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/shared/shared_UI.dart';
@@ -281,44 +280,6 @@ class _HomePageState extends State<HomePage>
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return StreamProvider<User>.value(
-                            initialData: User.fromMap({}),
-                            value: firebaseService.streamUser(user.uid),
-                            child: SettingsPage(),
-                          );
-                        }));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, top: 15, bottom: 15),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              FontAwesomeIcons.userCog,
-                              color: Colors.white,
-                              size: 23,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                            ),
-                            Text(
-                              'Settings',
-                              style: TextStyle(
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    InkWell(
                       onTap: () => firebaseService.signOut(),
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -361,7 +322,7 @@ class _HomePageState extends State<HomePage>
                           final DynamicLinkParameters parameters =
                               DynamicLinkParameters(
                             uriPrefix: 'https://baron.page.link',
-                            link: Uri.parse('https://saverl.com/soura'),
+                            link: Uri.parse('https://saverl.com/collectibles'),
                             androidParameters: AndroidParameters(
                                 packageName: 'com.saverl.baron',
                                 fallbackUrl: Uri.parse(

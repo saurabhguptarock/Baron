@@ -75,6 +75,24 @@ Stream<List<Collectible>> streamCollectible() {
           .toList());
 }
 
+void buyCollectible(Collectible collectible, User userDetails, int cost) {
+  _firestore
+      .collection('users')
+      .document(userDetails.uid)
+      .updateData({'soura': FieldValue.increment(-cost)}).then((v) {
+    _firestore
+        .collection('users')
+        .document(userDetails.uid)
+        .collection('inventory')
+        .add({
+      'name': collectible.name,
+      'quality': collectible.quality,
+      'docId': '',
+      'img': collectible.img,
+    }).then((data) => data.updateData({'docId': data.documentID}));
+  });
+}
+
 void signOut() {
   _auth.signOut();
 }

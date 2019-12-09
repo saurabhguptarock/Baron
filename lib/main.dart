@@ -2,7 +2,6 @@ import 'package:Baron/model/user_model.dart';
 import 'package:Baron/pages/collectibles_page.dart';
 import 'package:Baron/pages/home_page.dart';
 import 'package:Baron/pages/notification_page.dart';
-import 'package:Baron/pages/settings_page.dart';
 import 'package:Baron/pages/soura_page.dart';
 import 'package:Baron/services/firebase_service.dart' as firebaseService;
 import 'package:Baron/users/login.dart';
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           "/login": (BuildContext context) => LoginPage(),
           "/collectibles": (BuildContext context) => CollectiblesPage(),
-          "/settings": (BuildContext context) => SettingsPage(),
           "/notifications": (BuildContext context) => NotificationsPage(),
           "/soura": (BuildContext context) => SouraPage(),
           "/home": (BuildContext context) => HomePage(),
@@ -89,8 +87,6 @@ class _QuickActionsManagerState extends State<QuickActionsManager> {
       return SouraPage();
     else if (path == '/notifications')
       return NotificationsPage();
-    else if (path == '/settings')
-      return SettingsPage();
     else if (path == '/collectibles')
       return CollectiblesPage();
     else
